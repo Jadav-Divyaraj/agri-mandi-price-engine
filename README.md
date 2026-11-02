@@ -267,7 +267,7 @@ Navigate to: `http://localhost:8000`
 
 - **Developer**: Diploma in Computer Engineering Fresher
 - **Specialization**: Full-Stack Web Development, Data Ingestion Pipelines, Python Automation
-- **Profiles**: [GitHub](https://github.com/Jadav-Divyaraj) • [LinkedIn](https://linkedin.com)
+- **LinkedIn**:  (www.linkedin.com/in/24-7067-divyarajsinh-jadav)
 
 ---
 
