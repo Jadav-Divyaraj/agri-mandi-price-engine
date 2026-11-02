@@ -1,0 +1,38 @@
+{
+  "generated_at": "2026-03-29T23:58:39.871839",
+  "scraped_at": "29 Mar 2026 23:58:39 IST",
+  "execution_time_seconds": 0.968319,
+  "total_commodities": 2,
+  "successful": 1,
+  "failed": 1,
+  "categories": {
+    "spices": [
+      {
+        "key": "cumin",
+        "name": "Cumin Seeds",
+        "category": "spices",
+        "min_price": 4223,
+        "max_price": 136000,
+        "modal_price": 5260,
+        "unit": "quintal",
+        "lowest_market": "Daloda APMC",
+        "markets_count": 8,
+        "source": "data_gov",
+        "success": true
+      },
+      {
+        "key": "turmeric",
+        "name": "Turmeric",
+        "api_names": [
+          "Turmeric"
+        ],
+        "category": "spices",
+        "min_price": 0,
+        "max_price": 0,
+        "modal_price": 0,
+        "unit": "quintal",
+        "success": false
+      }
+    ]
+  }
+}

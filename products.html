@@ -1,0 +1,1324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+  <meta name="theme-color" content="#1a6b3a"/>
+  <title>All Products — AgroReach India</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+    .page-hero{background:linear-gradient(135deg,#0f3d22 0%,#1a6b3a 100%);padding:110px 24px 52px;text-align:center}
+    .page-hero h1{font-family:var(--font-display);font-size:clamp(2rem,5vw,3rem);color:#fff;font-weight:700;margin-bottom:10px}
+    .page-hero p{color:rgba(255,255,255,.72);font-size:1rem}
+    .back-link{display:inline-flex;align-items:center;gap:6px;color:rgba(255,255,255,.7);font-size:.88rem;margin-bottom:20px;transition:color .2s}
+    .back-link:hover{color:#fff}
+    .products-page{padding:52px 0 100px}
+    .results-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:8px}
+    .results-bar span{font-size:.88rem;color:var(--gray-600)}
+    .results-bar strong{color:var(--green)}
+    .card-img-top{height:155px;overflow:hidden;position:relative;background:var(--gray-100)}
+    .product-img{width:100%;height:100%;object-fit:cover;object-position:center;display:block;transition:transform .4s ease}
+    .product-card:hover .product-img{transform:scale(1.06)}
+    .card-img-top .card-badge{position:absolute;top:10px;right:10px;background:rgba(255,255,255,.88);backdrop-filter:blur(6px);font-size:.7rem;font-weight:700;color:var(--gray-700,#374151);padding:3px 10px;border-radius:50px;z-index:1;text-transform:uppercase;letter-spacing:.04em}
+    .price-triple{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:14px}
+    .price-box{background:var(--gray-50);border:1px solid var(--gray-200);border-radius:6px;padding:6px 8px;text-align:center}
+    .price-box .pb-label{font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:2px}
+    .price-box .pb-val{font-family:var(--font-display);font-size:.95rem;font-weight:700;display:block}
+    .pb-min .pb-label,.pb-min .pb-val{color:#b45309}
+    .pb-max .pb-label,.pb-max .pb-val{color:#dc2626}
+    .pb-modal .pb-label,.pb-modal .pb-val{color:var(--green)}
+    .price-unit-row{font-size:.72rem;color:var(--gray-500,#6b7280);margin-top:-6px;margin-bottom:10px;text-align:center}
+    .cat-section-heading{font-family:var(--font-display);font-size:1.4rem;font-weight:700;color:var(--gray-900);margin:48px 0 20px;padding-bottom:10px;border-bottom:2px solid var(--green-pale);display:flex;align-items:center;gap:10px}
+    .cat-section-heading span.cat-count{font-family:var(--font-body);font-size:.78rem;font-weight:600;background:var(--green-pale);color:var(--green);padding:2px 10px;border-radius:50px}
+    .card-emoji-wrap{height:155px;display:flex;align-items:center;justify-content:center;position:relative}
+    .card-emoji-wrap .card-emoji{font-size:3rem}
+    @media(max-width:640px){.card-img-top,.card-emoji-wrap{height:120px}.price-box .pb-val{font-size:.85rem}.price-box .pb-label{font-size:.58rem}}
+  </style>
+</head>
+<body>
+  <nav id="navbar">
+    <div class="nav-inner">
+      <a href="index.html" class="logo"><span class="logo-icon">🌾</span><span>AgroReach <em>India</em></span></a>
+      <ul class="nav-links">
+        <li><a href="products.html" style="color:var(--green);font-weight:600">Products</a></li>
+        <li><a href="prices.html">Live Prices</a></li>
+        <li><a href="index.html#about">About</a></li>
+        <li><a href="index.html#certifications">Certifications</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+      </ul>
+      <a href="index.html#contact" class="btn-quote">Contact US</a>
+      <button class="hamburger" id="hamburger" aria-label="Toggle Menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="products.html" class="mob-link" onclick="closeMobileMenu()">🥬 Products</a>
+      <a href="prices.html" class="mob-link" onclick="closeMobileMenu()">📊 Live Prices</a>
+      <a href="index.html#about" class="mob-link" onclick="closeMobileMenu()">ℹ️ About Us</a>
+      <a href="index.html#certifications" class="mob-link" onclick="closeMobileMenu()">✅ Certifications</a>
+      <a href="index.html#contact" class="mob-link" onclick="closeMobileMenu()">📞 Contact</a>
+      <a href="index.html#contact" class="btn-quote mob-quote" onclick="closeMobileMenu()">Get a Quote →</a>
+      <a href="https://wa.me/919876543210" class="btn-whatsapp mob-wa" target="_blank">💬 WhatsApp Us</a>
+    </div>
+  </nav>
+  <div class="mob-backdrop" id="mobBackdrop" onclick="closeMobileMenu()"></div>
+
+  <div class="page-hero">
+    <a href="index.html" class="back-link">← Back to Home</a>
+    <h1>All Export Products</h1>
+    <p>60+ premium agro commodities · Min / Max / Modal mandi prices · Updated daily</p>
+  </div>
+
+  <section class="products-page">
+    <div class="container">
+      <div class="search-bar" style="max-width:100%;margin-bottom:20px">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="productSearch" placeholder="Search — Cumin, Onion, Basmati, Cashew..."/>
+        <select id="categoryFilter">
+          <option value="all">All Categories</option>
+          <option value="spices">🌶 Spices</option>
+          <option value="fruits">🥭 Fruits</option>
+          <option value="vegetables">🧅 Vegetables</option>
+          <option value="grains">🌾 Grains & Pulses</option>
+          <option value="dryfruits">🥜 Dry Fruits & Nuts</option>
+          <option value="oils">🫙 Oil & Oilseeds</option>
+          <option value="others">🍵 Others</option>
+        </select>
+      </div>
+      <div class="category-tabs" style="margin-bottom:28px">
+        <button class="cat-tab active" data-cat="all">All</button>
+        <button class="cat-tab" data-cat="spices">🌶 Spices</button>
+        <button class="cat-tab" data-cat="fruits">🥭 Fruits</button>
+        <button class="cat-tab" data-cat="vegetables">🧅 Vegetables</button>
+        <button class="cat-tab" data-cat="grains">🌾 Grains</button>
+        <button class="cat-tab" data-cat="dryfruits">🥜 Dry Fruits</button>
+        <button class="cat-tab" data-cat="oils">🫙 Oils</button>
+        <button class="cat-tab" data-cat="others">🍵 Others</button>
+      </div>
+      <div class="results-bar">
+        <span><strong id="resultCount">62</strong> products found</span>
+        <span id="priceUpdatedAt" style="font-size:.78rem;color:var(--gray-400)">Prices loading...</span>
+      </div>
+
+      <h2 class="cat-section-heading" id="section-spices">🌶 Spices <span class="cat-count">12 products</span></h2>
+      <div class="products-grid">
+        <div class="product-card" data-cat="spices" data-name="Cumin Seeds">
+          <div class="card-img-top">
+            <img src="https://freshmills.in/cdn/shop/files/cumin-seeds-568171.jpg?v=1717361822&width=800" alt="Cumin Seeds" class="product-img" loading="lazy">
+            <span class="card-badge">Spices</span>
+          </div>
+          <div class="card-body">
+            <h3>Cumin Seeds</h3>
+            <p class="card-origin">📍 Rajasthan, Gujarat</p>
+            <div class="card-meta"><span>HS: 0909.21</span><span>MOQ: 1 MT</span></div>
+            <div class="price-triple">
+              <div class="price-box pb-min"><span class="pb-label">Min</span><span class="pb-val" data-product="cumin-min">₹—</span></div>
+              <div class="price-box pb-max"><span class="pb-label">Max</span><span class="pb-val" data-product="cumin-max">₹—</span></div>
+              <div class="price-box pb-modal"><span class="pb-label">Lowest</span><span class="pb-val" data-product="cumin-modal">₹—</span></div>
+            </div>
+            <p class="price-unit-row">₹ per quintal · Source undisclosed 🔒</p>
+            <button class="btn-enquire" onclick="openEnquiry('Cumin Seeds')">Enquire Now</button>
+          </div>
+        </div>
+        <div class="product-card" data-cat="spices" data-name="Turmeric">
+          <div class="card-img-top">
+            <img src="https://growhoss.com/cdn/shop/products/turmeric-new2023_800x.jpg?v=1769193170" alt="Turmeric" class="product-img" loading="lazy">
+            <span class="card-badge">Spices</span>
+          </div>
+          <div class="card-body">
+            <h3>Turmeric</h3>
+            <p class="card-origin">📍 Andhra Pradesh, Telangana</p>
+            <div class="card-meta"><span>HS: 0910.30</span><span>MOQ: 500 Kg</span></div>
+            <div class="price-triple">
+              <div class="price-box pb-min"><span class="pb-label">Min</span><span class="pb-val" data-product="turmeric-min">₹—</span></div>
+              <div class="price-box pb-max"><span class="pb-label">Max</span><span class="pb-val" data-product="turmeric-max">₹—</span></div>
+              <div class="price-box pb-modal"><span class="pb-label">Lowest</span><span class="pb-val" data-product="turmeric-modal">₹—</span></div>
+            </div>
+            <p class="price-unit-row">₹ per quintal · Source undisclosed 🔒</p>
+            <button class="btn-enquire" onclick="openEnquiry('Turmeric')">Enquire Now</button>
+          </div>
+        </div>
+        <div class="product-card" data-cat="spices" data-name="Red Chilli">
+          <div class="card-img-top">
+            <img src="https://vishweshwaraexports.com/assets/uploads/service-7.jpg" alt="Red Chilli" class="product-img" loading="lazy">
+            <span class="card-badge">Spices</span>
+          </div>
+          <div class="card-body">
+            <h3>Red Chilli</h3>
+            <p class="card-origin">📍 Andhra Pradesh, MP</p>
+            <div class="card-meta"><span>HS: 0904.21</span><span>MOQ: 500 Kg</span></div>
+            <div class="price-triple">
+              <div class="price-box pb-min"><span class="pb-label">Min</span><span class="pb-val" data-product="chilli-min">₹—</span></div>
+              <div class="price-box pb-max"><span class="pb-label">Max</span><span class="pb-val" data-product="chilli-max">₹—</span></div>
+              <div class="price-box pb-modal"><span class="pb-label">Lowest</span><span class="pb-val" data-product="chilli-modal">₹—</span></div>
+            </div>
+            <p class="price-unit-row">₹ per quintal · Source undisclosed 🔒</p>
+            <button class="btn-enquire" onclick="openEnquiry('Red Chilli')">Enquire Now</button>
+          </div>
+        </div>
+        <div class="product-card" data-cat="spices" data-name="Black Pepper">
+          <div class="card-img-top">
+            <img src="https://greenspices.in/wp-content/uploads/2021/07/black-pepper1.png" alt="Black Pepper" class="product-img" loading="lazy">
+            <span class="card-badge">Spices</span>
+          </div>
+          <div class="card-body">
+            <h3>Black Pepper</h3>
+            <p class="card-origin">📍 Kerala, Karnataka</p>
+            <div class="card-meta"><span>HS: 0904.11</span><span>MOQ: 200 Kg</span></div>
+            <div class="price-triple">
+              <div class="price-box pb-min"><span class="pb-label">Min</span><span class="pb-val" data-product="pepper-min">₹—</span></div>
+              <div class="price-box pb-max"><span class="pb-label">Max</span><span class="pb-val" data-product="pepper-max">₹—</span></div>
+              <div class="price-box pb-modal"><span class="pb-label">Lowest</span><span class="pb-val" data-product="pepper-modal">₹—</span></div>
+            </div>
+            <p class="price-unit-row">₹ per quintal · Source undisclosed 🔒</p>
+            <button class="btn-enquire" onclick="openEnquiry('Black Pepper')">Enquire Now</button>
+          </div>
+        </div>
+        <div class="product-card" data-cat="spices" data-name="Cardamom">
+          <div class="card-img-top">
+            <img src="https://greenspices.in/wp-content/uploads/2021/07/Cardamom.jpg" alt="Cardamom" class="product-img" loading="lazy">
+            <span class="card-badge">Spices</span>
+          </div>
+          <div class="card-body">
+            <h3>Cardamom</h3>
+            <p class="card-origin">📍 Kerala, Sikkim</p>
+            <div class="card-meta"><span>HS: 0908.31</span><span>MOQ: 100 Kg</span></div>
+            <div class="price-triple">
+              <div class="price-box pb-min"><span class="pb-label">Min</span><span class="pb-val" data-product="cardamom-min">₹—</span></div>
+              <div class="price-box pb-max"><span class="pb-label">Max</span><span class="pb-val" data-product="cardamom-max">₹—</span></div>
+              <div class="price-box pb-modal"><span class="pb-label">Lowest</span><span class="pb-val" data-product="cardamom-modal">₹—</span></div>
+            </div>
+            <p class="price-unit-row">₹ per quintal · Source undisclosed 🔒</p>
+            <button class="btn-enquire" onclick="openEnquiry('Cardamom')">Enquire Now</button>
+          </div>
+        </div>
+        <div class="product-card" data-cat="spices" data-name="Ginger (Dry)">
+          <div class="card-img-top">
+            <img src="https://media.post.rvohealth.io/wp-content/uploads/2023/09/ginger-root-still-life-1296x728-header.jpg" alt="Ginger (Dry)" class="product-img" loading="lazy">
+            <span class="card-badge">Spices</span>
+          </div>
+          <div class="card-body">
+            <h3>Ginger (Dry)</h3>
+            <p class="card-origin">📍 Kerala, Karnataka, AP</p>
+            <div class="card-meta"><span>HS: 0910.11</span><span>MOQ: 500 Kg</span></div>
+            <div class="price-triple">
+              <div class="price-box pb-min"><span class="pb-label">Min</span><span class="pb-val" data-product="ginger-min">₹—</span></div>
+              <div class="price-box pb-max"><span class="pb-label">Max</span><span class="pb-val" data-product="ginger-max">₹—</span></div>
+              <div class="price-box pb-modal"><span class="pb-label">Lowest</span><span class="pb-val" data-product="ginger-modal">₹—</span></div>
+            </div>
+            <p class="price-unit-row">₹ per quintal · Source undisclosed 🔒</p>
+            <button class="btn-enquire" onclick="openEnquiry('Ginger (Dry)')">Enquire Now</button>
+          </div>
+        </div>
+        <div class="product-card" data-cat="spices" data-name="Garlic">
+          <div class="card-img-top">
+            <img src="https://media.post.rvohealth.io/wp-content/uploads/2018/06/garlic-732x549-thumbnail.jpg" alt="Garlic" class="product-img" loading="lazy">
+            <span class="card-badge">Spices</span>
+          </div>
+          <div class="card-body">
+            <h3>Garlic</h3>
+            <p class="card-origin">📍 MP, Rajasthan, Gujarat</p>
+            <div class="card-meta"><span>HS: 0703.20</span><span>MOQ: 500 Kg</span></div>
+            <div class="price-triple">
+              <div class="price-box pb-min"><span class="pb-label">Min</span><span class="pb-val" data-product="garlic-min">₹—</span></div>
+              <div class="price-box pb-max"><span class="pb-label">Max</span><span class="pb-val" data-product="garlic-max">₹—</span></div>
+              <div class="price-box pb-modal"><span class="pb-label">Lowest</span><span class="pb-val" data-product="garlic-modal">₹—</span></div>
+            </div>
+            <p class="price-unit-row">₹ per quintal · Source undisclosed 🔒</p>
+            <button class="btn-enquire" onclick="openEnquiry('Garlic')">Enquire Now</button>
+          </div>
+        </div>
+        <div class="product-card" data-cat="spices" data-name="Coriander Seeds">
+          <div class="card-img-top">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQocs49A2Zlisxz4eD5ye8MiB3FkEhIkGng2A&s" alt="Coriander Seeds" class="product-img" loading="lazy">
+            <span class="card-badge">Spices</span>
+          </div>
+          <div class="card-body">
+            <h3>Coriander Seeds</h3>
+            <p class="card-origin">📍 Rajasthan, MP</p>
+            <div class="card-meta"><span>HS: 0909.21</span><span>MOQ: 500 Kg</span></div>
+            <div class="price-triple">
+              <div class="price-box pb-min"><span class="pb-label">Min</span><span class="pb-val" data-product="coriander-min">₹—</span></div>
+              <div class="price-box pb-max"><span class="pb-label">Max</span><span class="pb-val" data-product="coriander-max">₹—</span></div>
+              <div class="price-box pb-modal"><span class="pb-label">Lowest</span><span class="pb-val" data-product="coriander-modal">₹—</span></div>
+            </div>
+            <p class="price-unit-row">₹ per quintal · Source undisclosed 🔒</p>
+            <button class="btn-enquire" onclick="openEnquiry('Coriander Seeds')">Enquire Now</button>
+          </div>
+        </div>
+        <div class="product-card" data-cat="spices" data-name="Mustard Seeds">
+          <div class="card-img-top">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSXejc2esL-7Jl7E6Pe-bjOfSA5OwcvHbQauw&s" alt="Mustard Seeds" class="product-img" loading="lazy">
+            <span class="card-badge">Spices</span>
+          </div>
+          <div class="card-body">
+            <h3>Mustard Seeds</h3>
+            <p class="card-origin">📍 Rajasthan, UP, Haryana</p>
+            <div class="card-meta"><span>HS: 1207.50</span><span>MOQ: 1 MT</span></div>
+            <div class="price-triple">
+              <div class="price-box pb-min"><span class="pb-label">Min</span><span class="pb-val" data-product="mustard-min">₹—</span></div>
+              <div class="price-box pb-max"><span class="pb-label">Max</span><span class="pb-val" data-product="mustard-max">₹—</span></div>
+              <div class="price-box pb-modal"><span class="pb-label">Lowest</span><span class="pb-val" data-product="mustard-modal">₹—</span></div>
+            </div>
+            <p class="price-unit-row">₹ per quintal · Source undisclosed 🔒</p>
+            <button class="btn-enquire" onclick="openEnquiry('Mustard Seeds')">Enquire Now</button>
+          </div>
+        </div>
+        <div class="product-card" data-cat="spices" data-name="Fenugreek (Methi)">
+          <div class="card-img-top">
+            <img src="https://cdn.britannica.com/05/118605-004-4D6BF054/Seeds-fenugreek.jpg" alt="Fenugreek (Methi)" class="product-img" loading="lazy">
+            <span class="card-badge">Spices</span>
+          </div>
+          <div class="card-body">
+            <h3>Fenugreek (Methi)</h3>
+            <p class="card-origin">📍 Rajasthan, Gujarat</p>
+            <div class="card-meta"><span>HS: 1212.99</span><span>MOQ: 500 Kg</span></div>
+            <div class="price-triple">
+              <div class="price-box pb-min"><span class="pb-label">Min</span><span class="pb-val" data-product="fenugreek-min">₹—</span></div>
+              <div class="price-box pb-max"><span class="pb-label">Max</span><span class="pb-val" data-product="fenugreek-max">₹—</span></div>
+              <div class="price-box pb-modal"><span class="pb-label">Lowest</span><span class="pb-val" data-product="fenugreek-modal">₹—</span></div>
+            </div>
+            <p class="price-unit-row">₹ per quintal · Source undisclosed 🔒</p>
+            <button class="btn-enquire" onclick="openEnquiry('Fenugreek (Methi)')">Enquire Now</button>
+          </div>
+        </div>
+        <div class="product-card" data-cat="spices" data-name="Fennel Seeds (Saunf)">
+          <div class="card-img-top">
+            <img src="https://flaevor.com/wp-content/uploads/2023/02/WhatAreFennelSeedsFlaevor.jpg" alt="Fennel Seeds (Saunf)" class="product-img" loading="lazy">
+            <span class="card-badge">Spices</span>
+          </div>
+          <div class="card-body">
+            <h3>Fennel Seeds (Saunf)</h3>
+            <p class="card-origin">📍 Gujarat, Rajasthan</p>
+            <div class="card-meta"><span>HS: 0909.61</span><span>MOQ: 500 Kg</span></div>
+            <div class="price-triple">
+              <div class="price-box pb-min"><span class="pb-label">Min</span><span class="pb-val" data-product="fennel-min">₹—</span></div>
+              <div class="price-box pb-max"><span class="pb-label">Max</span><span class="pb-val" data-product="fennel-max">₹—</span></div>
+              <div class="price-box pb-modal"><span class="pb-label">Lowest</span><span class="pb-val" data-product="fennel-modal">₹—</span></div>
+            </div>
+            <p class="price-unit-row">₹ per quintal · Source undisclosed 🔒</p>
+            <button class="btn-enquire" onclick="openEnquiry('Fennel Seeds (Saunf)')">Enquire Now</button>
+          </div>
+        </div>
+        <div class="product-card" data-cat="spices" data-name="Ajwain (Carom Seeds)">
+          <div class="card-emoji-wrap spices">
+            <span class="card-emoji"> <img src="https://5.imimg.com/data5/LC/TR/GLADMIN-49805256/ajwain-carom-seeds-500x500.png" alt="Ajwain">  </span>
+            <span class="card-badge">Spices</span>
+          </div>
+          <div class="card-body">
+            <h3>Ajwain (Carom Seeds)</h3>
+            <p class="card-origin">📍 Rajasthan, Gujarat, MP</p>
+            <div class="card-meta"><span>HS: 0909.61</span><span>MOQ: 500 Kg</span></div>
+            <div class="price-triple">
+              <div class="price-box pb-min"><span class="pb-label">Min</span><span class="pb-val" data-product="ajwain-min">₹—</span></div>
+              <div class="price-box pb-max"><span class="pb-label">Max</span><span class="pb-val" data-product="ajwain-max">₹—</span></div>
+              <div class="price-box pb-modal"><span class="pb-label">Lowest</span><span class="pb-val" data-product="ajwain-modal">₹—</span></div>
+            </div>
+            <p class="price-unit-row">₹ per quintal · Source undisclosed 🔒</p>
+            <button class="btn-enquire" onclick="openEnquiry('Ajwain (Carom Seeds)')">Enquire Now</button>
+          </div>
+        </div>
+      </div>
+      <h2 class="cat-section-heading" id="section-fruits">🥭 Fruits <span class="cat-count">10 products</span></h2>
+      <div class="products-grid">
+        <div class="product-card" data-cat="fruits" data-name="Alphonso Mango">
+          <div class="card-img-top">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSMtiFcqhsLXNl17nvBcfq1a25BjpUwzMakLg&s" alt="Alphonso Mango" class="product-img" loading="lazy">
+            <span class="card-badge">Fruits</span>
+          </div>
+          <div class="card-body">
+            <h3>Alphonso Mango</h3>
+            <p class="card-origin">📍 Ratnagiri, Maharashtra</p>
+            <div class="card-meta"><span>HS: 0804.50</span><span>MOQ: 200 Kg</span></div>
+            <div class="price-triple">
+              <div class="price-box pb-min"><span class="pb-label">Min</span><span class="pb-val" data-product="mango-min">₹—</span></div>
+              <div class="price-box pb-max"><span class="pb-label">Max</span><span class="pb-val" data-product="mango-max">₹—</span></div>
+              <div class="price-box pb-modal"><span class="pb-label">Lowest</span><span class="pb-val" data-product="mango-modal">₹—</span></div>
+            </div>
+            <p class="price-unit-row">₹ per quintal · Source undisclosed 🔒</p>
+            <button class="btn-enquire" onclick="openEnquiry('Alphonso Mango')">Enquire Now</button>
+          </div>
+        </div>
+        <div class="product-card" data-cat="fruits" data-name="Pomegranate">
+          <div class="card-img-top">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcROYrOBGag9sSsrmCwcH4ZoijryEM-Zbquw1w&s" alt="Pomegranate" class="product-img" loading="lazy">
+            <span class="card-badge">Fruits</span>
+          </div>
+          <div class="card-body">
+            <h3>Pomegranate</h3>
+            <p class="card-origin">📍 Solapur, Nashik</p>
+            <div class="card-meta"><span>HS: 0810.90</span><span>MOQ: 300 Kg</span></div>
+            <div class="price-triple">
+              <div class="price-box pb-min"><span class="pb-label">Min</span><span class="pb-val" data-product="pomegranate-min">₹—</span></div>
+              <div class="price-box pb-max"><span class="pb-label">Max</span><span class="pb-val" data-product="pomegranate-max">₹—</span></div>
+              <div class="price-box pb-modal"><span class="pb-label">Lowest</span><span class="pb-val" data-product="pomegranate-modal">₹—</span></div>
+            </div>
+            <p class="price-unit-row">₹ per quintal · Source undisclosed 🔒</p>
+            <button class="btn-enquire" onclick="openEnquiry('Pomegranate')">Enquire Now</button>
+          </div>
+        </div>
+        <div class="product-card" data-cat="fruits" data-name="Grapes">
+          <div class="card-img-top">
+            <img src="https://m.media-amazon.com/images/I/61F+fR8WQfL._AC_UF350,350_QL80_.jpg" alt="Grapes" class="product-img" loading="lazy">
+            <span class="card-badge">Fruits</span>
+          </div>
+          <div class="card-body">
+            <h3>Grapes</h3>
+            <p class="card-origin">📍 Nashik, Sangli</p>
+            <div class="card-meta"><span>HS: 0806.10</span><span>MOQ: 200 Kg</span></div>
+            <div class="price-triple">
+              <div class="price-box pb-min"><span class="pb-label">Min</span><span class="pb-val" data-product="grapes-min">₹—</span></div>
+              <div class="price-box pb-max"><span class="pb-label">Max</span><span class="pb-val" data-product="grapes-max">₹—</span></div>
+              <div class="price-box pb-modal"><span class="pb-label">Lowest</span><span class="pb-val" data-product="grapes-modal">₹—</span></div>
+            </div>
+            <p class="price-unit-row">₹ per quintal · Source undisclosed 🔒</p>
+            <button class="btn-enquire" onclick="openEnquiry('Grapes')">Enquire Now</button>
+          </div>
+        </div>
+        <div class="product-card" data-cat="fruits" data-name="Banana">
+          <div class="card-img-top">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Banana-Platano.jpg/640px-Banana-Platano.jpg" alt="Banana" class="product-img" loading="lazy">
+            <span class="card-badge">Fruits</span>
+          </div>
+          <div class="card-body">
+            <h3>Banana</h3>
+            <p class="card-origin">📍 Tamil Nadu, Andhra Pradesh</p>
+            <div class="card-meta"><span>HS: 0803.90</span><span>MOQ: 500 Kg</span></div>
+            <div class="price-triple">
+              <div class="price-box pb-min"><span class="pb-label">Min</span><span class="pb-val" data-product="banana-min">₹—</span></div>
+              <div class="price-box pb-max"><span class="pb-label">Max</span><span class="pb-val" data-product="banana-max">₹—</span></div>
+              <div class="price-box pb-modal"><span class="pb-label">Lowest</span><span class="pb-val" data-product="banana-modal">₹—</span></div>
+            </div>
+            <p class="price-unit-row">₹ per quintal · Source undisclosed 🔒</p>
+            <button class="btn-enquire" onclick="openEnquiry('Banana')">Enquire Now</button>
+          </div>
+        </div>
+        <div class="product-card" data-cat="fruits" data-name="Apple">
+          <div class="card-img-top">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Red_Apple.jpg/640px-Red_Apple.jpg" alt="Apple" class="product-img" loading="lazy">
+            <span class="card-badge">Fruits</span>
+          </div>
+          <div class="card-body">
+            <h3>Apple</h3>
+            <p class="card-origin">📍 Himachal Pradesh, J&K</p>
+            <div class="card-meta"><span>HS: 0808.10</span><span>MOQ: 200 Kg</span></div>
+            <div class="price-triple">
+              <div class="price-box pb-min"><span class="pb-label">Min</span><span class="pb-val" data-product="apple-min">₹—</span></div>
+              <div class="price-box pb-max"><span class="pb-label">Max</span><span class="pb-val" data-product="apple-max">₹—</span></div>
+              <div class="price-box pb-modal"><span class="pb-label">Lowest</span><span class="pb-val" data-product="apple-modal">₹—</span></div>
+            </div>
+            <p class="price-unit-row">₹ per quintal · Source undisclosed 🔒</p>
+            <button class="btn-enquire" onclick="openEnquiry('Apple')">Enquire Now</button>
+          </div>
+        </div>
+        <div class="product-card" data-cat="fruits" data-name="Coconut">
+          <div class="card-img-top">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Coconut_on_white_background.jpg/640px-Coconut_on_white_background.jpg" alt="Coconut" class="product-img" loading="lazy">
+            <span class="card-badge">Fruits</span>
+          </div>
+          <div class="card-body">
+            <h3>Coconut</h3>
+            <p class="card-origin">📍 Kerala, Tamil Nadu</p>
+            <div class="card-meta"><span>HS: 0801.11</span><span>MOQ: 1000 pcs</span></div>
+            <div class="price-triple">
+              <div class="price-box pb-min"><span class="pb-label">Min</span><span class="pb-val" data-product="coconut-min">₹—</span></div>
+              <div class="price-box pb-max"><span class="pb-label">Max</span><span class="pb-val" data-product="coconut-max">₹—</span></div>
+              <div class="price-box pb-modal"><span class="pb-label">Lowest</span><span class="pb-val" data-product="coconut-modal">₹—</span></div>
+            </div>
+            <p class="price-unit-row">₹ per quintal · Source undisclosed 🔒</p>
+            <button class="btn-enquire" onclick="openEnquiry('Coconut')">Enquire Now</button>
+          </div>
+        </div>
+        <div class="product-card" data-cat="fruits" data-name="Watermelon">
+          <div class="card-img-top">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Eating_watermelon_%28Pixabay%29.jpg/640px-Eating_watermelon_%28Pixabay%29.jpg" alt="Watermelon" class="product-img" loading="lazy">
+            <span class="card-badge">Fruits</span>
+          </div>
+          <div class="card-body">
+            <h3>Watermelon</h3>
+            <p class="card-origin">📍 Karnataka, AP, Rajasthan</p>
+            <div class="card-meta"><span>HS: 0807.11</span><span>MOQ: 1 MT</span></div>
+            <div class="price-triple">
+              <div class="price-box pb-min"><span class="pb-label">Min</span><span class="pb-val" data-product="watermelon-min">₹—</span></div>
+              <div class="price-box pb-max"><span class="pb-label">Max</span><span class="pb-val" data-product="watermelon-max">₹—</span></div>
+              <div class="price-box pb-modal"><span class="pb-label">Lowest</span><span class="pb-val" data-product="watermelon-modal">₹—</span></div>
+            </div>
+            <p class="price-unit-row">₹ per quintal · Source undisclosed 🔒</p>
+            <button class="btn-enquire" onclick="openEnquiry('Watermelon')">Enquire Now</button>
+          </div>
+        </div>
+        <div class="product-card" data-cat="fruits" data-name="Orange (Nagpur)">
+          <div class="card-img-top">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Oranges_and_orange_juice.jpg/640px-Oranges_and_orange_juice.jpg" alt="Orange (Nagpur)" class="product-img" loading="lazy">
+            <span class="card-badge">Fruits</span>
+          </div>
+          <div class="card-body">
+            <h3>Orange (Nagpur)</h3>
+            <p class="card-origin">📍 Nagpur, Maharashtra</p>
+            <div class="card-meta"><span>HS: 0805.10</span><span>MOQ: 300 Kg</span></div>
+            <div class="price-triple">
+              <div class="price-box pb-min"><span class="pb-label">Min</span><span class="pb-val" data-product="orange-min">₹—</span></div>
+              <div class="price-box pb-max"><span class="pb-label">Max</span><span class="pb-val" data-product="orange-max">₹—</span></div>
+              <div class="price-box pb-modal"><span class="pb-label">Lowest</span><span class="pb-val" data-product="orange-modal">₹—</span></div>
+            </div>
+            <p class="price-unit-row">₹ per quintal · Source undisclosed 🔒</p>
+            <button class="btn-enquire" onclick="openEnquiry('Orange (Nagpur)')">Enquire Now</button>
+          </div>
+        </div>
+        <div class="product-card" data-cat="fruits" data-name="Papaya">
+          <div class="card-img-top">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Halved_papaya.jpg/640px-Halved_papaya.jpg" alt="Papaya" class="product-img" loading="lazy">
+            <span class="card-badge">Fruits</span>
+          </div>
+          <div class="card-body">
+            <h3>Papaya</h3>
+            <p class="card-origin">📍 Andhra Pradesh, Maharashtra</p>
+            <div class="card-meta"><span>HS: 0807.20</span><span>MOQ: 500 Kg</span></div>
+            <div class="price-triple">
+              <div class="price-box pb-min"><span class="pb-label">Min</span><span class="pb-val" data-product="papaya-min">₹—</span></div>
+              <div class="price-box pb-max"><span class="pb-label">Max</span><span class="pb-val" data-product="papaya-max">₹—</span></div>
+              <div class="price-box pb-modal"><span class="pb-label">Lowest</span><span class="pb-val" data-product="papaya-modal">₹—</span></div>
+            </div>
+            <p class="price-unit-row">₹ per quintal · Source undisclosed 🔒</p>
+            <button class="btn-enquire" onclick="openEnquiry('Papaya')">Enquire Now</button>
+          </div>
+        </div>
+        <div class="product-card" data-cat="fruits" data-name="Guava">
+          <div class="card-img-top">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Guava_ID.jpg/640px-Guava_ID.jpg" alt="Guava" class="product-img" loading="lazy">
+            <span class="card-badge">Fruits</span>
+          </div>
+          <div class="card-body">
+            <h3>Guava</h3>
+            <p class="card-origin">📍 Allahabad, MP</p>
+            <div class="card-meta"><span>HS: 0804.40</span><span>MOQ: 300 Kg</span></div>
+            <div class="price-triple">
+              <div class="price-box pb-min"><span class="pb-label">Min</span><span class="pb-val" data-product="guava-min">₹—</span></div>
+              <div class="price-box pb-max"><span class="pb-label">Max</span><span class="pb-val" data-product="guava-max">₹—</span></div>
+              <div class="price-box pb-modal"><span class="pb-label">Lowest</span><span class="pb-val" data-product="guava-modal">₹—</span></div>
+            </div>
+            <p class="price-unit-row">₹ per quintal · Source undisclosed 🔒</p>
+            <button class="btn-enquire" onclick="openEnquiry('Guava')">Enquire Now</button>
+          </div>
+        </div>
+      </div>
+      <h2 class="cat-section-heading" id="section-vegetables">🧅 Vegetables <span class="cat-count">10 products</span></h2>
+      <div class="products-grid">
+        <div class="product-card" data-cat="vegetables" data-name="Onion">
+          <div class="card-img-top">
+            <img src="https://arunachalobserver.org/wp-content/uploads/2024/12/full-frame-shot-of-onions-in-market-stall-562386223-59b97e59845b340010f8d76e.jpg" alt="Onion" class="product-img" loading="lazy">
+            <span class="card-badge">Vegetables</span>
+          </div>
+          <div class="card-body">
+            <h3>Onion</h3>
+            <p class="card-origin">📍 Nashik, Lasalgaon</p>
+            <div class="card-meta"><span>HS: 0703.10</span><span>MOQ: 1 MT</span></div>
+            <div class="price-triple">
+              <div class="price-box pb-min"><span class="pb-label">Min</span><span class="pb-val" data-product="onion-min">₹—</span></div>
+              <div class="price-box pb-max"><span class="pb-label">Max</span><span class="pb-val" data-product="onion-max">₹—</span></div>
+              <div class="price-box pb-modal"><span class="pb-label">Lowest</span><span class="pb-val" data-product="onion-modal">₹—</span></div>
+            </div>
+            <p class="price-unit-row">₹ per quintal · Source undisclosed 🔒</p>
+            <button class="btn-enquire" onclick="openEnquiry('Onion')">Enquire Now</button>
+          </div>
+        </div>
+        <div class="product-card" data-cat="vegetables" data-name="Potato">
+          <div class="card-img-top">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Patates.jpg/640px-Patates.jpg" alt="Potato" class="product-img" loading="lazy">
+            <span class="card-badge">Vegetables</span>
+          </div>
+          <div class="card-body">
+            <h3>Potato</h3>
+            <p class="card-origin">📍 Agra, Aligarh, UP</p>
+            <div class="card-meta"><span>HS: 0701.90</span><span>MOQ: 1 MT</span></div>
+            <div class="price-triple">
+              <div class="price-box pb-min"><span class="pb-label">Min</span><span class="pb-val" data-product="potato-min">₹—</span></div>
+              <div class="price-box pb-max"><span class="pb-label">Max</span><span class="pb-val" data-product="potato-max">₹—</span></div>
+              <div class="price-box pb-modal"><span class="pb-label">Lowest</span><span class="pb-val" data-product="potato-modal">₹—</span></div>
+            </div>
+            <p class="price-unit-row">₹ per quintal · Source undisclosed 🔒</p>
+            <button class="btn-enquire" onclick="openEnquiry('Potato')">Enquire Now</button>
+          </div>
+        </div>
+        <div class="product-card" data-cat="vegetables" data-name="Tomato">
+          <div class="card-img-top">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Tomato_je.jpg/640px-Tomato_je.jpg" alt="Tomato" class="product-img" loading="lazy">
+            <span class="card-badge">Vegetables</span>
+          </div>
+          <div class="card-body">
+            <h3>Tomato</h3>
+            <p class="card-origin">📍 Nashik, Kolar</p>
+            <div class="card-meta"><span>HS: 0702.00</span><span>MOQ: 500 Kg</span></div>
+            <div class="price-triple">
+              <div class="price-box pb-min"><span class="pb-label">Min</span><span class="pb-val" data-product="tomato-min">₹—</span></div>
+              <div class="price-box pb-max"><span class="pb-label">Max</span><span class="pb-val" data-product="tomato-max">₹—</span></div>
+              <div class="price-box pb-modal"><span class="pb-label">Lowest</span><span class="pb-val" data-product="tomato-modal">₹—</span></div>
+            </div>
+            <p class="price-unit-row">₹ per quintal · Source undisclosed 🔒</p>
+            <button class="btn-enquire" onclick="openEnquiry('Tomato')">Enquire Now</button>
+          </div>
+        </div>
+        <div class="product-card" data-cat="vegetables" data-name="Green Chilli">
+          <div class="card-img-top">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Chili_pepper_on_white_background.jpg/640px-Chili_pepper_on_white_background.jpg" alt="Green Chilli" class="product-img" loading="lazy">
+            <span class="card-badge">Vegetables</span>
+          </div>
+          <div class="card-body">
+            <h3>Green Chilli</h3>
+            <p class="card-origin">📍 Andhra Pradesh, Gujarat</p>
+            <div class="card-meta"><span>HS: 0709.60</span><span>MOQ: 500 Kg</span></div>
+            <div class="price-triple">
+              <div class="price-box pb-min"><span class="pb-label">Min</span><span class="pb-val" data-product="greenchilli-min">₹—</span></div>
+              <div class="price-box pb-max"><span class="pb-label">Max</span><span class="pb-val" data-product="greenchilli-max">₹—</span></div>
+              <div class="price-box pb-modal"><span class="pb-label">Lowest</span><span class="pb-val" data-product="greenchilli-modal">₹—</span></div>
+            </div>
+            <p class="price-unit-row">₹ per quintal · Source undisclosed 🔒</p>
+            <button class="btn-enquire" onclick="openEnquiry('Green Chilli')">Enquire Now</button>
+          </div>
+        </div>
+        <div class="product-card" data-cat="vegetables" data-name="Cauliflower">
+          <div class="card-img-top">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/Chou-fleur_02.jpg/640px-Chou-fleur_02.jpg" alt="Cauliflower" class="product-img" loading="lazy">
+            <span class="card-badge">Vegetables</span>
+          </div>
+          <div class="card-body">
+            <h3>Cauliflower</h3>
+            <p class="card-origin">📍 Punjab, Haryana, UP</p>
+            <div class="card-meta"><span>HS: 0704.10</span><span>MOQ: 500 Kg</span></div>
+            <div class="price-triple">
+              <div class="price-box pb-min"><span class="pb-label">Min</span><span class="pb-val" data-product="cauliflower-min">₹—</span></div>
+              <div class="price-box pb-max"><span class="pb-label">Max</span><span class="pb-val" data-product="cauliflower-max">₹—</span></div>
+              <div class="price-box pb-modal"><span class="pb-label">Lowest</span><span class="pb-val" data-product="cauliflower-modal">₹—</span></div>
+            </div>
+            <p class="price-unit-row">₹ per quintal · Source undisclosed 🔒</p>
+            <button class="btn-enquire" onclick="openEnquiry('Cauliflower')">Enquire Now</button>
+          </div>
+        </div>
+        <div class="product-card" data-cat="vegetables" data-name="Capsicum">
+          <div class="card-img-top">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Capsicum_annuum_-_fruits_%28aka%29.jpg/640px-Capsicum_annuum_-_fruits_%28aka%29.jpg" alt="Capsicum" class="product-img" loading="lazy">
+            <span class="card-badge">Vegetables</span>
+          </div>
+          <div class="card-body">
+            <h3>Capsicum</h3>
+            <p class="card-origin">📍 Himachal Pradesh, Karnataka</p>
+            <div class="card-meta"><span>HS: 0709.60</span><span>MOQ: 300 Kg</span></div>
+            <div class="price-triple">
+              <div class="price-box pb-min"><span class="pb-label">Min</span><span class="pb-val" data-product="capsicum-min">₹—</span></div>
+              <div class="price-box pb-max"><span class="pb-label">Max</span><span class="pb-val" data-product="capsicum-max">₹—</span></div>
+              <div class="price-box pb-modal"><span class="pb-label">Lowest</span><span class="pb-val" data-product="capsicum-modal">₹—</span></div>
+            </div>
+            <p class="price-unit-row">₹ per quintal · Source undisclosed 🔒</p>
+            <button class="btn-enquire" onclick="openEnquiry('Capsicum')">Enquire Now</button>
+          </div>
+        </div>
+        <div class="product-card" data-cat="vegetables" data-name="Carrot">
+          <div class="card-img-top">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Vegetable-Carrot-Bundle-wStalks.jpg/640px-Vegetable-Carrot-Bundle-wStalks.jpg" alt="Carrot" class="product-img" loading="lazy">
+            <span class="card-badge">Vegetables</span>
+          </div>
+          <div class="card-body">
+            <h3>Carrot</h3>
+            <p class="card-origin">📍 Ooty, Pune, Punjab</p>
+            <div class="card-meta"><span>HS: 0706.10</span><span>MOQ: 500 Kg</span></div>
+            <div class="price-triple">
+              <div class="price-box pb-min"><span class="pb-label">Min</span><span class="pb-val" data-product="carrot-min">₹—</span></div>
+              <div class="price-box pb-max"><span class="pb-label">Max</span><span class="pb-val" data-product="carrot-max">₹—</span></div>
+              <div class="price-box pb-modal"><span class="pb-label">Lowest</span><span class="pb-val" data-product="carrot-modal">₹—</span></div>
+            </div>
+            <p class="price-unit-row">₹ per quintal · Source undisclosed 🔒</p>
+            <button class="btn-enquire" onclick="openEnquiry('Carrot')">Enquire Now</button>
+          </div>
+        </div>
+        <div class="product-card" data-cat="vegetables" data-name="Brinjal">
+          <div class="card-emoji-wrap vegetables">
+            <span class="card-emoji">🥦</span>
+            <span class="card-badge">Vegetables</span>
+          </div>
+          <div class="card-body">
+            <h3>Brinjal</h3>
+            <p class="card-origin">📍 Andhra Pradesh, Maharashtra</p>
+            <div class="card-meta"><span>HS: 0709.30</span><span>MOQ: 500 Kg</span></div>
+            <div class="price-triple">
+              <div class="price-box pb-min"><span class="pb-label">Min</span><span class="pb-val" data-product="brinjal-min">₹—</span></div>
+              <div class="price-box pb-max"><span class="pb-label">Max</span><span class="pb-val" data-product="brinjal-max">₹—</span></div>
+              <div class="price-box pb-modal"><span class="pb-label">Lowest</span><span class="pb-val" data-product="brinjal-modal">₹—</span></div>
+            </div>
+            <p class="price-unit-row">₹ per quintal · Source undisclosed 🔒</p>
+            <button class="btn-enquire" onclick="openEnquiry('Brinjal')">Enquire Now</button>
+          </div>
+        </div>
+        <div class="product-card" data-cat="vegetables" data-name="Lady Finger (Bhindi)">
+          <div class="card-emoji-wrap vegetables">
+            <span class="card-emoji">🥦</span>
+            <span class="card-badge">Vegetables</span>
+          </div>
+          <div class="card-body">
+            <h3>Lady Finger (Bhindi)</h3>
+            <p class="card-origin">📍 Maharashtra, AP, Gujarat</p>
+            <div class="card-meta"><span>HS: 0709.99</span><span>MOQ: 500 Kg</span></div>
+            <div class="price-triple">
+              <div class="price-box pb-min"><span class="pb-label">Min</span><span class="pb-val" data-product="ladyfinger-min">₹—</span></div>
+              <div class="price-box pb-max"><span class="pb-label">Max</span><span class="pb-val" data-product="ladyfinger-max">₹—</span></div>
+              <div class="price-box pb-modal"><span class="pb-label">Lowest</span><span class="pb-val" data-product="ladyfinger-modal">₹—</span></div>
+            </div>
+            <p class="price-unit-row">₹ per quintal · Source undisclosed 🔒</p>
+            <button class="btn-enquire" onclick="openEnquiry('Lady Finger (Bhindi)')">Enquire Now</button>
+          </div>
+        </div>
+        <div class="product-card" data-cat="vegetables" data-name="Green Peas">
+          <div class="card-emoji-wrap vegetables">
+            <span class="card-emoji">🥦</span>
+            <span class="card-badge">Vegetables</span>
+          </div>
+          <div class="card-body">
+            <h3>Green Peas</h3>
+            <p class="card-origin">📍 UP, Punjab, Himachal</p>
+            <div class="card-meta"><span>HS: 0708.10</span><span>MOQ: 500 Kg</span></div>
+            <div class="price-triple">
+              <div class="price-box pb-min"><span class="pb-label">Min</span><span class="pb-val" data-product="peas-min">₹—</span></div>
+              <div class="price-box pb-max"><span class="pb-label">Max</span><span class="pb-val" data-product="peas-max">₹—</span></div>
+              <div class="price-box pb-modal"><span class="pb-label">Lowest</span><span class="pb-val" data-product="peas-modal">₹—</span></div>
+            </div>
+            <p class="price-unit-row">₹ per quintal · Source undisclosed 🔒</p>
+            <button class="btn-enquire" onclick="openEnquiry('Green Peas')">Enquire Now</button>
+          </div>
+        </div>
+      </div>
+      <h2 class="cat-section-heading" id="section-grains">🌾 Grains & Pulses <span class="cat-count">12 products</span></h2>
+      <div class="products-grid">
+        <div class="product-card" data-cat="grains" data-name="Basmati Rice (1121)">
+          <div class="card-img-top">
+            <img src="https://5.imimg.com/data5/PJ/FW/MY-27318931/fresh-basmati-rice-500x500.jpeg" alt="Basmati Rice (1121)" class="product-img" loading="lazy">
+            <span class="card-badge">Grains</span>
+          </div>
+          <div class="card-body">
+            <h3>Basmati Rice (1121)</h3>
+            <p class="card-origin">📍 Punjab, Haryana</p>
+            <div class="card-meta"><span>HS: 1006.30</span><span>MOQ: 1 MT</span></div>
+            <div class="price-triple">
+              <div class="price-box pb-min"><span class="pb-label">Min</span><span class="pb-val" data-product="basmati-min">₹—</span></div>
+              <div class="price-box pb-max"><span class="pb-label">Max</span><span class="pb-val" data-product="basmati-max">₹—</span></div>
+              <div class="price-box pb-modal"><span class="pb-label">Lowest</span><span class="pb-val" data-product="basmati-modal">₹—</span></div>
+            </div>
+            <p class="price-unit-row">₹ per quintal · Source undisclosed 🔒</p>
+            <button class="btn-enquire" onclick="openEnquiry('Basmati Rice (1121)')">Enquire Now</button>
+          </div>
+        </div>
+        <div class="product-card" data-cat="grains" data-name="Wheat">
+          <div class="card-img-top">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Wheat_close-up.JPG/640px-Wheat_close-up.JPG" alt="Wheat" class="product-img" loading="lazy">
+            <span class="card-badge">Grains</span>
+          </div>
+          <div class="card-body">
+            <h3>Wheat</h3>
+            <p class="card-origin">📍 Punjab, MP, Rajasthan</p>
+            <div class="card-meta"><span>HS: 1001.99</span><span>MOQ: 5 MT</span></div>
+            <div class="price-triple">
+              <div class="price-box pb-min"><span class="pb-label">Min</span><span class="pb-val" data-product="wheat-min">₹—</span></div>
+              <div class="price-box pb-max"><span class="pb-label">Max</span><span class="pb-val" data-product="wheat-max">₹—</span></div>
+              <div class="price-box pb-modal"><span class="pb-label">Lowest</span><span class="pb-val" data-product="wheat-modal">₹—</span></div>
+            </div>
+            <p class="price-unit-row">₹ per quintal · Source undisclosed 🔒</p>
+            <button class="btn-enquire" onclick="openEnquiry('Wheat')">Enquire Now</button>
+          </div>
+        </div>
+        <div class="product-card" data-cat="grains" data-name="Maize (Corn)">
+          <div class="card-img-top">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Corncobs_-_single.jpg/640px-Corncobs_-_single.jpg" alt="Maize (Corn)" class="product-img" loading="lazy">
+            <span class="card-badge">Grains</span>
+          </div>
+          <div class="card-body">
+            <h3>Maize (Corn)</h3>
+            <p class="card-origin">📍 Karnataka, Bihar, AP</p>
+            <div class="card-meta"><span>HS: 1005.90</span><span>MOQ: 5 MT</span></div>
+            <div class="price-triple">
+              <div class="price-box pb-min"><span class="pb-label">Min</span><span class="pb-val" data-product="maize-min">₹—</span></div>
+              <div class="price-box pb-max"><span class="pb-label">Max</span><span class="pb-val" data-product="maize-max">₹—</span></div>
+              <div class="price-box pb-modal"><span class="pb-label">Lowest</span><span class="pb-val" data-product="maize-modal">₹—</span></div>
+            </div>
+            <p class="price-unit-row">₹ per quintal · Source undisclosed 🔒</p>
+            <button class="btn-enquire" onclick="openEnquiry('Maize (Corn)')">Enquire Now</button>
+          </div>
+        </div>
+        <div class="product-card" data-cat="grains" data-name="Chana (Gram)">
+          <div class="card-img-top">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Chickpeas_%28Australian%29.jpg/640px-Chickpeas_%28Australian%29.jpg" alt="Chana (Gram)" class="product-img" loading="lazy">
+            <span class="card-badge">Grains</span>
+          </div>
+          <div class="card-body">
+            <h3>Chana (Gram)</h3>
+            <p class="card-origin">📍 Rajasthan, MP, AP</p>
+            <div class="card-meta"><span>HS: 0713.20</span><span>MOQ: 1 MT</span></div>
+            <div class="price-triple">
+              <div class="price-box pb-min"><span class="pb-label">Min</span><span class="pb-val" data-product="chana-min">₹—</span></div>
+              <div class="price-box pb-max"><span class="pb-label">Max</span><span class="pb-val" data-product="chana-max">₹—</span></div>
+              <div class="price-box pb-modal"><span class="pb-label">Lowest</span><span class="pb-val" data-product="chana-modal">₹—</span></div>
+            </div>
+            <p class="price-unit-row">₹ per quintal · Source undisclosed 🔒</p>
+            <button class="btn-enquire" onclick="openEnquiry('Chana (Gram)')">Enquire Now</button>
+          </div>
+        </div>
+        <div class="product-card" data-cat="grains" data-name="Soybean">
+          <div class="card-img-top">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Soybeanvarieties.jpg/640px-Soybeanvarieties.jpg" alt="Soybean" class="product-img" loading="lazy">
+            <span class="card-badge">Grains</span>
+          </div>
+          <div class="card-body">
+            <h3>Soybean</h3>
+            <p class="card-origin">📍 MP, Maharashtra</p>
+            <div class="card-meta"><span>HS: 1201.90</span><span>MOQ: 5 MT</span></div>
+            <div class="price-triple">
+              <div class="price-box pb-min"><span class="pb-label">Min</span><span class="pb-val" data-product="soybean-min">₹—</span></div>
+              <div class="price-box pb-max"><span class="pb-label">Max</span><span class="pb-val" data-product="soybean-max">₹—</span></div>
+              <div class="price-box pb-modal"><span class="pb-label">Lowest</span><span class="pb-val" data-product="soybean-modal">₹—</span></div>
+            </div>
+            <p class="price-unit-row">₹ per quintal · Source undisclosed 🔒</p>
+            <button class="btn-enquire" onclick="openEnquiry('Soybean')">Enquire Now</button>
+          </div>
+        </div>
+        <div class="product-card" data-cat="grains" data-name="Tur Dal (Arhar)">
+          <div class="card-emoji-wrap grains">
+            <span class="card-emoji">🌾</span>
+            <span class="card-badge">Grains</span>
+          </div>
+          <div class="card-body">
+            <h3>Tur Dal (Arhar)</h3>
+            <p class="card-origin">📍 Maharashtra, Karnataka, UP</p>
+            <div class="card-meta"><span>HS: 0713.10</span><span>MOQ: 1 MT</span></div>
+            <div class="price-triple">
+              <div class="price-box pb-min"><span class="pb-label">Min</span><span class="pb-val" data-product="tur-min">₹—</span></div>
+              <div class="price-box pb-max"><span class="pb-label">Max</span><span class="pb-val" data-product="tur-max">₹—</span></div>
+              <div class="price-box pb-modal"><span class="pb-label">Lowest</span><span class="pb-val" data-product="tur-modal">₹—</span></div>
+            </div>
+            <p class="price-unit-row">₹ per quintal · Source undisclosed 🔒</p>
+            <button class="btn-enquire" onclick="openEnquiry('Tur Dal (Arhar)')">Enquire Now</button>
+          </div>
+        </div>
+        <div class="product-card" data-cat="grains" data-name="Moong Dal">
+          <div class="card-emoji-wrap grains">
+            <span class="card-emoji">🌾</span>
+            <span class="card-badge">Grains</span>
+          </div>
+          <div class="card-body">
+            <h3>Moong Dal</h3>
+            <p class="card-origin">📍 Rajasthan, Maharashtra</p>
+            <div class="card-meta"><span>HS: 0713.31</span><span>MOQ: 1 MT</span></div>
+            <div class="price-triple">
+              <div class="price-box pb-min"><span class="pb-label">Min</span><span class="pb-val" data-product="moong-min">₹—</span></div>
+              <div class="price-box pb-max"><span class="pb-label">Max</span><span class="pb-val" data-product="moong-max">₹—</span></div>
+              <div class="price-box pb-modal"><span class="pb-label">Lowest</span><span class="pb-val" data-product="moong-modal">₹—</span></div>
+            </div>
+            <p class="price-unit-row">₹ per quintal · Source undisclosed 🔒</p>
+            <button class="btn-enquire" onclick="openEnquiry('Moong Dal')">Enquire Now</button>
+          </div>
+        </div>
+        <div class="product-card" data-cat="grains" data-name="Urad Dal (Black Gram)">
+          <div class="card-emoji-wrap grains">
+            <span class="card-emoji">🌾</span>
+            <span class="card-badge">Grains</span>
+          </div>
+          <div class="card-body">
+            <h3>Urad Dal (Black Gram)</h3>
+            <p class="card-origin">📍 MP, Rajasthan, AP</p>
+            <div class="card-meta"><span>HS: 0713.31</span><span>MOQ: 1 MT</span></div>
+            <div class="price-triple">
+              <div class="price-box pb-min"><span class="pb-label">Min</span><span class="pb-val" data-product="urad-min">₹—</span></div>
+              <div class="price-box pb-max"><span class="pb-label">Max</span><span class="pb-val" data-product="urad-max">₹—</span></div>
+              <div class="price-box pb-modal"><span class="pb-label">Lowest</span><span class="pb-val" data-product="urad-modal">₹—</span></div>
+            </div>
+            <p class="price-unit-row">₹ per quintal · Source undisclosed 🔒</p>
+            <button class="btn-enquire" onclick="openEnquiry('Urad Dal (Black Gram)')">Enquire Now</button>
+          </div>
+        </div>
+        <div class="product-card" data-cat="grains" data-name="Masoor Dal (Red Lentil)">
+          <div class="card-emoji-wrap grains">
+            <span class="card-emoji">🌾</span>
+            <span class="card-badge">Grains</span>
+          </div>
+          <div class="card-body">
+            <h3>Masoor Dal (Red Lentil)</h3>
+            <p class="card-origin">📍 MP, UP, Bihar</p>
+            <div class="card-meta"><span>HS: 0713.40</span><span>MOQ: 1 MT</span></div>
+            <div class="price-triple">
+              <div class="price-box pb-min"><span class="pb-label">Min</span><span class="pb-val" data-product="masoor-min">₹—</span></div>
+              <div class="price-box pb-max"><span class="pb-label">Max</span><span class="pb-val" data-product="masoor-max">₹—</span></div>
+              <div class="price-box pb-modal"><span class="pb-label">Lowest</span><span class="pb-val" data-product="masoor-modal">₹—</span></div>
+            </div>
+            <p class="price-unit-row">₹ per quintal · Source undisclosed 🔒</p>
+            <button class="btn-enquire" onclick="openEnquiry('Masoor Dal (Red Lentil)')">Enquire Now</button>
+          </div>
+        </div>
+        <div class="product-card" data-cat="grains" data-name="Bajra (Pearl Millet)">
+          <div class="card-emoji-wrap grains">
+            <span class="card-emoji">🌾</span>
+            <span class="card-badge">Grains</span>
+          </div>
+          <div class="card-body">
+            <h3>Bajra (Pearl Millet)</h3>
+            <p class="card-origin">📍 Rajasthan, UP, Gujarat</p>
+            <div class="card-meta"><span>HS: 1008.21</span><span>MOQ: 5 MT</span></div>
+            <div class="price-triple">
+              <div class="price-box pb-min"><span class="pb-label">Min</span><span class="pb-val" data-product="bajra-min">₹—</span></div>
+              <div class="price-box pb-max"><span class="pb-label">Max</span><span class="pb-val" data-product="bajra-max">₹—</span></div>
+              <div class="price-box pb-modal"><span class="pb-label">Lowest</span><span class="pb-val" data-product="bajra-modal">₹—</span></div>
+            </div>
+            <p class="price-unit-row">₹ per quintal · Source undisclosed 🔒</p>
+            <button class="btn-enquire" onclick="openEnquiry('Bajra (Pearl Millet)')">Enquire Now</button>
+          </div>
+        </div>
+        <div class="product-card" data-cat="grains" data-name="Rajma (Kidney Beans)">
+          <div class="card-emoji-wrap grains">
+            <span class="card-emoji">🌾</span>
+            <span class="card-badge">Grains</span>
+          </div>
+          <div class="card-body">
+            <h3>Rajma (Kidney Beans)</h3>
+            <p class="card-origin">📍 J&K, Himachal Pradesh</p>
+            <div class="card-meta"><span>HS: 0713.33</span><span>MOQ: 500 Kg</span></div>
+            <div class="price-triple">
+              <div class="price-box pb-min"><span class="pb-label">Min</span><span class="pb-val" data-product="rajma-min">₹—</span></div>
+              <div class="price-box pb-max"><span class="pb-label">Max</span><span class="pb-val" data-product="rajma-max">₹—</span></div>
+              <div class="price-box pb-modal"><span class="pb-label">Lowest</span><span class="pb-val" data-product="rajma-modal">₹—</span></div>
+            </div>
+            <p class="price-unit-row">₹ per quintal · Source undisclosed 🔒</p>
+            <button class="btn-enquire" onclick="openEnquiry('Rajma (Kidney Beans)')">Enquire Now</button>
+          </div>
+        </div>
+        <div class="product-card" data-cat="grains" data-name="Jowar (Sorghum)">
+          <div class="card-emoji-wrap grains">
+            <span class="card-emoji">🌾</span>
+            <span class="card-badge">Grains</span>
+          </div>
+          <div class="card-body">
+            <h3>Jowar (Sorghum)</h3>
+            <p class="card-origin">📍 Maharashtra, Karnataka</p>
+            <div class="card-meta"><span>HS: 1007.90</span><span>MOQ: 5 MT</span></div>
+            <div class="price-triple">
+              <div class="price-box pb-min"><span class="pb-label">Min</span><span class="pb-val" data-product="jowar-min">₹—</span></div>
+              <div class="price-box pb-max"><span class="pb-label">Max</span><span class="pb-val" data-product="jowar-max">₹—</span></div>
+              <div class="price-box pb-modal"><span class="pb-label">Lowest</span><span class="pb-val" data-product="jowar-modal">₹—</span></div>
+            </div>
+            <p class="price-unit-row">₹ per quintal · Source undisclosed 🔒</p>
+            <button class="btn-enquire" onclick="openEnquiry('Jowar (Sorghum)')">Enquire Now</button>
+          </div>
+        </div>
+      </div>
+      <h2 class="cat-section-heading" id="section-dryfruits">🥜 Dry Fruits & Nuts <span class="cat-count">7 products</span></h2>
+      <div class="products-grid">
+        <div class="product-card" data-cat="dryfruits" data-name="Cashew (W320)">
+          <div class="card-img-top">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Cashew_Nuts.jpg/640px-Cashew_Nuts.jpg" alt="Cashew (W320)" class="product-img" loading="lazy">
+            <span class="card-badge">Dry Fruits</span>
+          </div>
+          <div class="card-body">
+            <h3>Cashew (W320)</h3>
+            <p class="card-origin">📍 Goa, Kerala, Karnataka</p>
+            <div class="card-meta"><span>HS: 0801.31</span><span>MOQ: 200 Kg</span></div>
+            <div class="price-triple">
+              <div class="price-box pb-min"><span class="pb-label">Min</span><span class="pb-val" data-product="cashew-min">₹—</span></div>
+              <div class="price-box pb-max"><span class="pb-label">Max</span><span class="pb-val" data-product="cashew-max">₹—</span></div>
+              <div class="price-box pb-modal"><span class="pb-label">Lowest</span><span class="pb-val" data-product="cashew-modal">₹—</span></div>
+            </div>
+            <p class="price-unit-row">₹ per quintal · Source undisclosed 🔒</p>
+            <button class="btn-enquire" onclick="openEnquiry('Cashew (W320)')">Enquire Now</button>
+          </div>
+        </div>
+        <div class="product-card" data-cat="dryfruits" data-name="Almonds">
+          <div class="card-img-top">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/Sweet_almonds.jpeg/640px-Sweet_almonds.jpeg" alt="Almonds" class="product-img" loading="lazy">
+            <span class="card-badge">Dry Fruits</span>
+          </div>
+          <div class="card-body">
+            <h3>Almonds</h3>
+            <p class="card-origin">📍 Jammu & Kashmir</p>
+            <div class="card-meta"><span>HS: 0802.11</span><span>MOQ: 100 Kg</span></div>
+            <div class="price-triple">
+              <div class="price-box pb-min"><span class="pb-label">Min</span><span class="pb-val" data-product="almonds-min">₹—</span></div>
+              <div class="price-box pb-max"><span class="pb-label">Max</span><span class="pb-val" data-product="almonds-max">₹—</span></div>
+              <div class="price-box pb-modal"><span class="pb-label">Lowest</span><span class="pb-val" data-product="almonds-modal">₹—</span></div>
+            </div>
+            <p class="price-unit-row">₹ per quintal · Source undisclosed 🔒</p>
+            <button class="btn-enquire" onclick="openEnquiry('Almonds')">Enquire Now</button>
+          </div>
+        </div>
+        <div class="product-card" data-cat="dryfruits" data-name="Walnut">
+          <div class="card-img-top">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/WalnutsOnTree.jpg/640px-WalnutsOnTree.jpg" alt="Walnut" class="product-img" loading="lazy">
+            <span class="card-badge">Dry Fruits</span>
+          </div>
+          <div class="card-body">
+            <h3>Walnut</h3>
+            <p class="card-origin">📍 Jammu & Kashmir, HP</p>
+            <div class="card-meta"><span>HS: 0802.31</span><span>MOQ: 100 Kg</span></div>
+            <div class="price-triple">
+              <div class="price-box pb-min"><span class="pb-label">Min</span><span class="pb-val" data-product="walnut-min">₹—</span></div>
+              <div class="price-box pb-max"><span class="pb-label">Max</span><span class="pb-val" data-product="walnut-max">₹—</span></div>
+              <div class="price-box pb-modal"><span class="pb-label">Lowest</span><span class="pb-val" data-product="walnut-modal">₹—</span></div>
+            </div>
+            <p class="price-unit-row">₹ per quintal · Source undisclosed 🔒</p>
+            <button class="btn-enquire" onclick="openEnquiry('Walnut')">Enquire Now</button>
+          </div>
+        </div>
+        <div class="product-card" data-cat="dryfruits" data-name="Raisins (Kishmish)">
+          <div class="card-img-top">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Raisins.png/640px-Raisins.png" alt="Raisins (Kishmish)" class="product-img" loading="lazy">
+            <span class="card-badge">Dry Fruits</span>
+          </div>
+          <div class="card-body">
+            <h3>Raisins (Kishmish)</h3>
+            <p class="card-origin">📍 Nashik, Sangli</p>
+            <div class="card-meta"><span>HS: 0806.20</span><span>MOQ: 200 Kg</span></div>
+            <div class="price-triple">
+              <div class="price-box pb-min"><span class="pb-label">Min</span><span class="pb-val" data-product="raisins-min">₹—</span></div>
+              <div class="price-box pb-max"><span class="pb-label">Max</span><span class="pb-val" data-product="raisins-max">₹—</span></div>
+              <div class="price-box pb-modal"><span class="pb-label">Lowest</span><span class="pb-val" data-product="raisins-modal">₹—</span></div>
+            </div>
+            <p class="price-unit-row">₹ per quintal · Source undisclosed 🔒</p>
+            <button class="btn-enquire" onclick="openEnquiry('Raisins (Kishmish)')">Enquire Now</button>
+          </div>
+        </div>
+        <div class="product-card" data-cat="dryfruits" data-name="Dates (Khajoor)">
+          <div class="card-emoji-wrap dryfruits">
+            <span class="card-emoji">🥜</span>
+            <span class="card-badge">Dry Fruits</span>
+          </div>
+          <div class="card-body">
+            <h3>Dates (Khajoor)</h3>
+            <p class="card-origin">📍 Gujarat, Rajasthan</p>
+            <div class="card-meta"><span>HS: 0804.10</span><span>MOQ: 200 Kg</span></div>
+            <div class="price-triple">
+              <div class="price-box pb-min"><span class="pb-label">Min</span><span class="pb-val" data-product="dates-min">₹—</span></div>
+              <div class="price-box pb-max"><span class="pb-label">Max</span><span class="pb-val" data-product="dates-max">₹—</span></div>
+              <div class="price-box pb-modal"><span class="pb-label">Lowest</span><span class="pb-val" data-product="dates-modal">₹—</span></div>
+            </div>
+            <p class="price-unit-row">₹ per quintal · Source undisclosed 🔒</p>
+            <button class="btn-enquire" onclick="openEnquiry('Dates (Khajoor)')">Enquire Now</button>
+          </div>
+        </div>
+        <div class="product-card" data-cat="dryfruits" data-name="Pistachio (Pista)">
+          <div class="card-emoji-wrap dryfruits">
+            <span class="card-emoji">🥜</span>
+            <span class="card-badge">Dry Fruits</span>
+          </div>
+          <div class="card-body">
+            <h3>Pistachio (Pista)</h3>
+            <p class="card-origin">📍 Import via Gujarat ports</p>
+            <div class="card-meta"><span>HS: 0802.51</span><span>MOQ: 100 Kg</span></div>
+            <div class="price-triple">
+              <div class="price-box pb-min"><span class="pb-label">Min</span><span class="pb-val" data-product="pista-min">₹—</span></div>
+              <div class="price-box pb-max"><span class="pb-label">Max</span><span class="pb-val" data-product="pista-max">₹—</span></div>
+              <div class="price-box pb-modal"><span class="pb-label">Lowest</span><span class="pb-val" data-product="pista-modal">₹—</span></div>
+            </div>
+            <p class="price-unit-row">₹ per quintal · Source undisclosed 🔒</p>
+            <button class="btn-enquire" onclick="openEnquiry('Pistachio (Pista)')">Enquire Now</button>
+          </div>
+        </div>
+        <div class="product-card" data-cat="dryfruits" data-name="Apricot (Khumani)">
+          <div class="card-emoji-wrap dryfruits">
+            <span class="card-emoji">🥜</span>
+            <span class="card-badge">Dry Fruits</span>
+          </div>
+          <div class="card-body">
+            <h3>Apricot (Khumani)</h3>
+            <p class="card-origin">📍 Ladakh, J&K, HP</p>
+            <div class="card-meta"><span>HS: 0813.10</span><span>MOQ: 100 Kg</span></div>
+            <div class="price-triple">
+              <div class="price-box pb-min"><span class="pb-label">Min</span><span class="pb-val" data-product="apricot-min">₹—</span></div>
+              <div class="price-box pb-max"><span class="pb-label">Max</span><span class="pb-val" data-product="apricot-max">₹—</span></div>
+              <div class="price-box pb-modal"><span class="pb-label">Lowest</span><span class="pb-val" data-product="apricot-modal">₹—</span></div>
+            </div>
+            <p class="price-unit-row">₹ per quintal · Source undisclosed 🔒</p>
+            <button class="btn-enquire" onclick="openEnquiry('Apricot (Khumani)')">Enquire Now</button>
+          </div>
+        </div>
+      </div>
+      <h2 class="cat-section-heading" id="section-oils">🫙 Oil & Oilseeds <span class="cat-count">6 products</span></h2>
+      <div class="products-grid">
+        <div class="product-card" data-cat="oils" data-name="Groundnut">
+          <div class="card-img-top">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Peanuts_in_shell02.jpg/640px-Peanuts_in_shell02.jpg" alt="Groundnut" class="product-img" loading="lazy">
+            <span class="card-badge">Oilseeds</span>
+          </div>
+          <div class="card-body">
+            <h3>Groundnut</h3>
+            <p class="card-origin">📍 Gujarat, AP, Tamil Nadu</p>
+            <div class="card-meta"><span>HS: 1202.41</span><span>MOQ: 1 MT</span></div>
+            <div class="price-triple">
+              <div class="price-box pb-min"><span class="pb-label">Min</span><span class="pb-val" data-product="groundnut-min">₹—</span></div>
+              <div class="price-box pb-max"><span class="pb-label">Max</span><span class="pb-val" data-product="groundnut-max">₹—</span></div>
+              <div class="price-box pb-modal"><span class="pb-label">Lowest</span><span class="pb-val" data-product="groundnut-modal">₹—</span></div>
+            </div>
+            <p class="price-unit-row">₹ per quintal · Source undisclosed 🔒</p>
+            <button class="btn-enquire" onclick="openEnquiry('Groundnut')">Enquire Now</button>
+          </div>
+        </div>
+        <div class="product-card" data-cat="oils" data-name="Sesame Seeds (Til)">
+          <div class="card-img-top">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Sesam.jpg/640px-Sesam.jpg" alt="Sesame Seeds (Til)" class="product-img" loading="lazy">
+            <span class="card-badge">Oilseeds</span>
+          </div>
+          <div class="card-body">
+            <h3>Sesame Seeds (Til)</h3>
+            <p class="card-origin">📍 Gujarat, Rajasthan, MP</p>
+            <div class="card-meta"><span>HS: 1207.40</span><span>MOQ: 500 Kg</span></div>
+            <div class="price-triple">
+              <div class="price-box pb-min"><span class="pb-label">Min</span><span class="pb-val" data-product="sesame-min">₹—</span></div>
+              <div class="price-box pb-max"><span class="pb-label">Max</span><span class="pb-val" data-product="sesame-max">₹—</span></div>
+              <div class="price-box pb-modal"><span class="pb-label">Lowest</span><span class="pb-val" data-product="sesame-modal">₹—</span></div>
+            </div>
+            <p class="price-unit-row">₹ per quintal · Source undisclosed 🔒</p>
+            <button class="btn-enquire" onclick="openEnquiry('Sesame Seeds (Til)')">Enquire Now</button>
+          </div>
+        </div>
+        <div class="product-card" data-cat="oils" data-name="Castor Seed">
+          <div class="card-emoji-wrap spices">
+            <span class="card-emoji">🫙</span>
+            <span class="card-badge">Oilseeds</span>
+          </div>
+          <div class="card-body">
+            <h3>Castor Seed</h3>
+            <p class="card-origin">📍 Gujarat, Andhra Pradesh</p>
+            <div class="card-meta"><span>HS: 1207.29</span><span>MOQ: 1 MT</span></div>
+            <div class="price-triple">
+              <div class="price-box pb-min"><span class="pb-label">Min</span><span class="pb-val" data-product="castorseed-min">₹—</span></div>
+              <div class="price-box pb-max"><span class="pb-label">Max</span><span class="pb-val" data-product="castorseed-max">₹—</span></div>
+              <div class="price-box pb-modal"><span class="pb-label">Lowest</span><span class="pb-val" data-product="castorseed-modal">₹—</span></div>
+            </div>
+            <p class="price-unit-row">₹ per quintal · Source undisclosed 🔒</p>
+            <button class="btn-enquire" onclick="openEnquiry('Castor Seed')">Enquire Now</button>
+          </div>
+        </div>
+        <div class="product-card" data-cat="oils" data-name="Sunflower Seed">
+          <div class="card-img-top">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Sunflower_seeds_USDA.jpg/640px-Sunflower_seeds_USDA.jpg" alt="Sunflower Seed" class="product-img" loading="lazy">
+            <span class="card-badge">Oilseeds</span>
+          </div>
+          <div class="card-body">
+            <h3>Sunflower Seed</h3>
+            <p class="card-origin">📍 Karnataka, AP, Maharashtra</p>
+            <div class="card-meta"><span>HS: 1206.00</span><span>MOQ: 1 MT</span></div>
+            <div class="price-triple">
+              <div class="price-box pb-min"><span class="pb-label">Min</span><span class="pb-val" data-product="sunflowerseed-min">₹—</span></div>
+              <div class="price-box pb-max"><span class="pb-label">Max</span><span class="pb-val" data-product="sunflowerseed-max">₹—</span></div>
+              <div class="price-box pb-modal"><span class="pb-label">Lowest</span><span class="pb-val" data-product="sunflowerseed-modal">₹—</span></div>
+            </div>
+            <p class="price-unit-row">₹ per quintal · Source undisclosed 🔒</p>
+            <button class="btn-enquire" onclick="openEnquiry('Sunflower Seed')">Enquire Now</button>
+          </div>
+        </div>
+        <div class="product-card" data-cat="oils" data-name="Copra (Dried Coconut)">
+          <div class="card-emoji-wrap spices">
+            <span class="card-emoji">🫙</span>
+            <span class="card-badge">Oilseeds</span>
+          </div>
+          <div class="card-body">
+            <h3>Copra (Dried Coconut)</h3>
+            <p class="card-origin">📍 Kerala, Tamil Nadu</p>
+            <div class="card-meta"><span>HS: 1203.00</span><span>MOQ: 500 Kg</span></div>
+            <div class="price-triple">
+              <div class="price-box pb-min"><span class="pb-label">Min</span><span class="pb-val" data-product="copra-min">₹—</span></div>
+              <div class="price-box pb-max"><span class="pb-label">Max</span><span class="pb-val" data-product="copra-max">₹—</span></div>
+              <div class="price-box pb-modal"><span class="pb-label">Lowest</span><span class="pb-val" data-product="copra-modal">₹—</span></div>
+            </div>
+            <p class="price-unit-row">₹ per quintal · Source undisclosed 🔒</p>
+            <button class="btn-enquire" onclick="openEnquiry('Copra (Dried Coconut)')">Enquire Now</button>
+          </div>
+        </div>
+        <div class="product-card" data-cat="oils" data-name="Cotton Seed">
+          <div class="card-emoji-wrap spices">
+            <span class="card-emoji">🫙</span>
+            <span class="card-badge">Oilseeds</span>
+          </div>
+          <div class="card-body">
+            <h3>Cotton Seed</h3>
+            <p class="card-origin">📍 Gujarat, Maharashtra, AP</p>
+            <div class="card-meta"><span>HS: 1207.21</span><span>MOQ: 1 MT</span></div>
+            <div class="price-triple">
+              <div class="price-box pb-min"><span class="pb-label">Min</span><span class="pb-val" data-product="cottonseed-min">₹—</span></div>
+              <div class="price-box pb-max"><span class="pb-label">Max</span><span class="pb-val" data-product="cottonseed-max">₹—</span></div>
+              <div class="price-box pb-modal"><span class="pb-label">Lowest</span><span class="pb-val" data-product="cottonseed-modal">₹—</span></div>
+            </div>
+            <p class="price-unit-row">₹ per quintal · Source undisclosed 🔒</p>
+            <button class="btn-enquire" onclick="openEnquiry('Cotton Seed')">Enquire Now</button>
+          </div>
+        </div>
+      </div>
+      <h2 class="cat-section-heading" id="section-others">🍵 Others <span class="cat-count">5 products</span></h2>
+      <div class="products-grid">
+        <div class="product-card" data-cat="others" data-name="Tea (CTC / Green)">
+          <div class="card-img-top">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Camellia_sinensis_01.jpg/640px-Camellia_sinensis_01.jpg" alt="Tea (CTC / Green)" class="product-img" loading="lazy">
+            <span class="card-badge">Others</span>
+          </div>
+          <div class="card-body">
+            <h3>Tea (CTC / Green)</h3>
+            <p class="card-origin">📍 Assam, Darjeeling, Nilgiris</p>
+            <div class="card-meta"><span>HS: 0902.10</span><span>MOQ: 100 Kg</span></div>
+            <div class="price-triple">
+              <div class="price-box pb-min"><span class="pb-label">Min</span><span class="pb-val" data-product="tea-min">₹—</span></div>
+              <div class="price-box pb-max"><span class="pb-label">Max</span><span class="pb-val" data-product="tea-max">₹—</span></div>
+              <div class="price-box pb-modal"><span class="pb-label">Lowest</span><span class="pb-val" data-product="tea-modal">₹—</span></div>
+            </div>
+            <p class="price-unit-row">₹ per quintal · Source undisclosed 🔒</p>
+            <button class="btn-enquire" onclick="openEnquiry('Tea (CTC / Green)')">Enquire Now</button>
+          </div>
+        </div>
+        <div class="product-card" data-cat="others" data-name="Coffee (Arabica / Robusta)">
+          <div class="card-img-top">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/A_small_cup_of_coffee.JPG/640px-A_small_cup_of_coffee.JPG" alt="Coffee (Arabica / Robusta)" class="product-img" loading="lazy">
+            <span class="card-badge">Others</span>
+          </div>
+          <div class="card-body">
+            <h3>Coffee (Arabica / Robusta)</h3>
+            <p class="card-origin">📍 Karnataka, Kerala</p>
+            <div class="card-meta"><span>HS: 0901.11</span><span>MOQ: 100 Kg</span></div>
+            <div class="price-triple">
+              <div class="price-box pb-min"><span class="pb-label">Min</span><span class="pb-val" data-product="coffee-min">₹—</span></div>
+              <div class="price-box pb-max"><span class="pb-label">Max</span><span class="pb-val" data-product="coffee-max">₹—</span></div>
+              <div class="price-box pb-modal"><span class="pb-label">Lowest</span><span class="pb-val" data-product="coffee-modal">₹—</span></div>
+            </div>
+            <p class="price-unit-row">₹ per quintal · Source undisclosed 🔒</p>
+            <button class="btn-enquire" onclick="openEnquiry('Coffee (Arabica / Robusta)')">Enquire Now</button>
+          </div>
+        </div>
+        <div class="product-card" data-cat="others" data-name="Honey (Natural)">
+          <div class="card-img-top">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Runny_hunny.jpg/640px-Runny_hunny.jpg" alt="Honey (Natural)" class="product-img" loading="lazy">
+            <span class="card-badge">Others</span>
+          </div>
+          <div class="card-body">
+            <h3>Honey (Natural)</h3>
+            <p class="card-origin">📍 Rajasthan, UP, Punjab</p>
+            <div class="card-meta"><span>HS: 0409.00</span><span>MOQ: 200 Kg</span></div>
+            <div class="price-triple">
+              <div class="price-box pb-min"><span class="pb-label">Min</span><span class="pb-val" data-product="honey-min">₹—</span></div>
+              <div class="price-box pb-max"><span class="pb-label">Max</span><span class="pb-val" data-product="honey-max">₹—</span></div>
+              <div class="price-box pb-modal"><span class="pb-label">Lowest</span><span class="pb-val" data-product="honey-modal">₹—</span></div>
+            </div>
+            <p class="price-unit-row">₹ per quintal · Source undisclosed 🔒</p>
+            <button class="btn-enquire" onclick="openEnquiry('Honey (Natural)')">Enquire Now</button>
+          </div>
+        </div>
+        <div class="product-card" data-cat="others" data-name="Rubber (RSS4)">
+          <div class="card-emoji-wrap fruits">
+            <span class="card-emoji">🍵</span>
+            <span class="card-badge">Others</span>
+          </div>
+          <div class="card-body">
+            <h3>Rubber (RSS4)</h3>
+            <p class="card-origin">📍 Kerala, Tamil Nadu</p>
+            <div class="card-meta"><span>HS: 4001.10</span><span>MOQ: 500 Kg</span></div>
+            <div class="price-triple">
+              <div class="price-box pb-min"><span class="pb-label">Min</span><span class="pb-val" data-product="rubber-min">₹—</span></div>
+              <div class="price-box pb-max"><span class="pb-label">Max</span><span class="pb-val" data-product="rubber-max">₹—</span></div>
+              <div class="price-box pb-modal"><span class="pb-label">Lowest</span><span class="pb-val" data-product="rubber-modal">₹—</span></div>
+            </div>
+            <p class="price-unit-row">₹ per quintal · Source undisclosed 🔒</p>
+            <button class="btn-enquire" onclick="openEnquiry('Rubber (RSS4)')">Enquire Now</button>
+          </div>
+        </div>
+        <div class="product-card" data-cat="others" data-name="Marigold (Loose Flower)">
+          <div class="card-img-top">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Marigold_Flowers.JPG/640px-Marigold_Flowers.JPG" alt="Marigold (Loose Flower)" class="product-img" loading="lazy">
+            <span class="card-badge">Others</span>
+          </div>
+          <div class="card-body">
+            <h3>Marigold (Loose Flower)</h3>
+            <p class="card-origin">📍 Andhra Pradesh, Karnataka</p>
+            <div class="card-meta"><span>HS: 0603.19</span><span>MOQ: 200 Kg</span></div>
+            <div class="price-triple">
+              <div class="price-box pb-min"><span class="pb-label">Min</span><span class="pb-val" data-product="marigold-min">₹—</span></div>
+              <div class="price-box pb-max"><span class="pb-label">Max</span><span class="pb-val" data-product="marigold-max">₹—</span></div>
+              <div class="price-box pb-modal"><span class="pb-label">Lowest</span><span class="pb-val" data-product="marigold-modal">₹—</span></div>
+            </div>
+            <p class="price-unit-row">₹ per quintal · Source undisclosed 🔒</p>
+            <button class="btn-enquire" onclick="openEnquiry('Marigold (Loose Flower)')">Enquire Now</button>
+          </div>
+        </div>
+      </div>
+
+      <p class="no-results" id="noResults" style="display:none;padding:40px;text-align:center;color:var(--gray-400)">No products match your search.</p>
+    </div>
+  </section>
+
+  <div class="modal-overlay" id="modalOverlay" onclick="closeModal()">
+    <div class="modal" onclick="event.stopPropagation()">
+      <button class="modal-close" onclick="closeModal()">✕</button>
+      <h3>Quick Enquiry</h3>
+      <p id="modalProductName" style="color:var(--green);font-weight:600"></p>
+      <input type="text"  placeholder="Your Name"                     id="mName"/>
+      <input type="email" placeholder="Your Email"                    id="mEmail"/>
+      <input type="text"  placeholder="Country"                       id="mCountry"/>
+      <input type="text"  placeholder="Quantity Required (e.g. 2 MT)" id="mQty"/>
+      <button onclick="submitModal()" class="btn-submit" style="width:100%;margin-top:8px">Send Enquiry →</button>
+    </div>
+  </div>
+
+  <a href="https://wa.me/9714314179" class="wa-float" target="_blank" title="Chat on WhatsApp"> <img src="https://play-lh.googleusercontent.com/bYtqbOcTYOlgc6gqZ2rwb8lptHuwlNE75zYJu6Bn076-hTmvd96HH-6v7S0YUAAJXoJN" alt="Chat on WhatsApp" /> </a>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="app.js"></script>
+  <script>
+  // ── MOCK PRICES (shown until scraper.py runs and produces prices.json) ──
+  const MOCK = {"cumin":[26800,30200,28400],"turmeric":[13000,15400,14200],"chilli":[16200,19800,17800],"pepper":[48000,56000,52000],"cardamom":[108000,124000,115000],"ginger":[12000,18000,14500],"garlic":[8400,11200,9500],"coriander":[6800,8400,7600],"mustard":[5200,6400,5800],"fenugreek":[4800,6200,5400],"fennel":[9200,12400,10800],"ajwain":[18000,24000,21000],"mango":[28000,36000,32000],"pomegranate":[8800,11200,9800],"grapes":[5600,7200,6400],"banana":[1400,2200,1800],"apple":[4200,6800,5200],"coconut":[1800,2600,2200],"watermelon":[600,1200,900],"orange":[2400,4000,3200],"papaya":[1200,2200,1600],"guava":[1600,2800,2100],"onion":[1400,2400,1850],"potato":[900,1500,1200],"tomato":[1800,3200,2400],"greenchilli":[3200,5400,4200],"cauliflower":[800,1400,1100],"capsicum":[2200,3800,2900],"carrot":[1200,2200,1600],"brinjal":[600,1200,900],"ladyfinger":[1400,2600,2000],"peas":[2400,4000,3200],"basmati":[6000,7800,6800],"wheat":[2100,2480,2280],"maize":[1800,2400,2100],"chana":[4800,5800,5200],"soybean":[4200,5200,4600],"tur":[6800,8200,7400],"moong":[7200,8800,7900],"urad":[7000,8400,7600],"masoor":[5400,6800,6100],"bajra":[1800,2400,2100],"rajma":[8800,12000,10200],"jowar":[2400,3200,2800],"cashew":[82000,96000,88000],"almonds":[66000,78000,72000],"walnut":[88000,108000,96000],"raisins":[12000,17000,14500],"dates":[9200,14000,11200],"pista":[118000,145000,128000],"apricot":[28000,38000,32000],"groundnut":[5200,6400,5800],"sesame":[14000,18000,16000],"castorseed":[6200,7400,6800],"sunflowerseed":[5200,6200,5600],"copra":[14000,17000,15500],"cottonseed":[3200,4200,3600],"tea":[14000,22000,17000],"coffee":[28000,42000,34000],"honey":[9200,14000,11000],"rubber":[18000,22000,20000],"marigold":[800,1800,1200]};
+
+  async function loadPrices() {
+    try {
+      const r = await fetch("prices.json");
+      if (!r.ok) throw new Error();
+      const d = await r.json();
+      for (const cat of Object.values(d.categories||{})) {
+        for (const p of cat) {
+          const f = n => n > 0 ? "₹"+n.toLocaleString("en-IN") : "₹—";
+          ["min","max","modal"].forEach(s => {
+            const el = document.querySelector(`[data-product="${p.key}-${s}"]`);
+            if (el) el.textContent = f(p[s]);
+          });
+        }
+      }
+      const ts = document.getElementById("priceUpdatedAt");
+      if (ts) ts.textContent = "Live prices: "+(d.generated_at?.slice(0,10)||"today")+" · Source: Agmarknet";
+    } catch {
+      const f = n => "₹"+n.toLocaleString("en-IN");
+      for (const [k,[mn,mx,mo]] of Object.entries(MOCK)) {
+        [["min",mn],["max",mx],["modal",mo]].forEach(([s,v]) => {
+          const el = document.querySelector(`[data-product="${k}-${s}"]`);
+          if (el) el.textContent = f(v);
+        });
+      }
+      const ts = document.getElementById("priceUpdatedAt");
+      if (ts) ts.textContent = "Demo prices · Run scraper.py for live Agmarknet data";
+    }
+  }
+
+  // Search + Filter
+  const se = document.getElementById("productSearch");
+  const cf = document.getElementById("categoryFilter");
+  const rc = document.getElementById("resultCount");
+  function filterAll() {
+    const q = se.value.toLowerCase().trim(), cat = cf.value;
+    document.querySelectorAll(".cat-section-heading").forEach(h => {
+      h.style.display = (cat==="all"||cat===h.id.replace("section-",""))?"":"none";
+    });
+    let n=0;
+    document.querySelectorAll(".product-card").forEach(c=>{
+      const show=(!q||c.dataset.name.toLowerCase().includes(q))&&(cat==="all"||c.dataset.cat===cat);
+      c.style.display=show?"":"none"; if(show) n++;
+    });
+    if(rc) rc.textContent=n;
+    const nr=document.getElementById("noResults"); if(nr) nr.style.display=n===0?"block":"none";
+  }
+  se?.addEventListener("input",filterAll);
+  cf?.addEventListener("change",e=>{document.querySelectorAll(".cat-tab").forEach(t=>t.classList.toggle("active",t.dataset.cat===e.target.value));filterAll();});
+  document.querySelectorAll(".cat-tab").forEach(b=>b.addEventListener("click",()=>{document.querySelectorAll(".cat-tab").forEach(t=>t.classList.remove("active"));b.classList.add("active");cf.value=b.dataset.cat;filterAll();}));
+
+  // Scroll reveal
+  const ro=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.style.opacity="1";e.target.style.transform="translateY(0)"}}),{threshold:.08});
+  document.querySelectorAll(".product-card").forEach(el=>{el.style.opacity="0";el.style.transform="translateY(16px)";el.style.transition="opacity .4s ease,transform .4s ease";ro.observe(el);});
+
+  loadPrices();
+  </script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+{
+  "spices": [
+    {
+      "key": "cumin",
+      "name": "Cumin Seeds",
+      "api_names": [
+        "Jeera",
+        "Cumin"
+      ]
+    },
+    {
+      "key": "turmeric",
+      "name": "Turmeric",
+      "api_names": [
+        "Turmeric"
+      ]
+    }
+  ]
+}

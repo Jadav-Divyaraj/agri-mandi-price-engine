@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#1a6b3a" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>AgroReach India — Premium Agricultural Expo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <!-- NAV -->
+  <nav id="navbar">
+    <div class="nav-inner">
+      <a href="#" class="logo">
+        <span class="logo-icon">🌾</span>
+        <span>AgroReach <em>India</em></span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="products.html">Products</a></li>
+        <li><a href="prices.html">Live Prices</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#certifications">Certifications</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <a href="#contact" class="btn-quote">Contact US</a>
+      <button class="hamburger" id="hamburger" aria-label="Toggle Menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <!-- Mobile drawer -->
+    <div class="mobile-menu" id="mobileMenu" role="dialog" aria-label="Navigation">
+      <a href="products.html" class="mob-link" onclick="closeMobileMenu()">🥬 Products</a>
+      <a href="prices.html" class="mob-link" onclick="closeMobileMenu()">📊 Live Prices</a>
+      <a href="#about" class="mob-link" onclick="closeMobileMenu()">ℹ️ About Us</a>
+      <a href="#certifications" class="mob-link" onclick="closeMobileMenu()">✅ Certifications</a>
+      <a href="#contact" class="mob-link" onclick="closeMobileMenu()">📞 Contact</a>
+      <a href="#contact" class="btn-quote mob-quote" onclick="closeMobileMenu()">Get a Quote →</a>
+      <a href="https://wa.me/919876543210" class="btn-whatsapp mob-wa" target="_blank">💬 WhatsApp Us</a>
+    </div>
+  </nav>
+  <!-- Mobile menu backdrop -->
+  <div class="mob-backdrop" id="mobBackdrop" onclick="closeMobileMenu()"></div>
+
+  <!-- =====================================================
+       HERO — Bootstrap Carousel
+       FIX 1: Restored prev/next control buttons
+       FIX 2: hero-stats bar re-added (was deleted, caused JS crash)
+       FIX 3: hero-badge re-added
+  ====================================================== -->
+  <section class="hero" id="home">
+
+    <!-- Bootstrap Carousel -->
+    <div id="heroCarousel" class="carousel slide hero-carousel" data-bs-ride="carousel" data-bs-interval="5000">
+      <div class="carousel-inner">
+        <div class="carousel-item active">
+          <img src="https://images.unsplash.com/photo-1601493700631-2b16ec4b4716?w=1600&q=80"
+            class="d-block w-100 carousel-img" alt="Indian spices export">
+          <div class="carousel-overlay"></div>
+        </div>
+        <div class="carousel-item">
+          <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?w=1600&q=80"
+            class="d-block w-100 carousel-img" alt="Fresh vegetables market">
+          <div class="carousel-overlay"></div>
+        </div>
+        <div class="carousel-item">
+          <img src="https://images.unsplash.com/photo-1573246123716-6b1782bfc499?w=1600&q=80"
+            class="d-block w-100 carousel-img" alt="Fresh fruits export India">
+          <div class="carousel-overlay"></div>
+        </div>
+        <div class="carousel-item">
+          <img src="https://images.unsplash.com/photo-1615485290382-441e4d049cb5?w=1600&q=80"
+            class="d-block w-100 carousel-img" alt="Grains and pulses">
+          <div class="carousel-overlay"></div>
+        </div>
+        <div class="carousel-item">
+          <img src="https://images.unsplash.com/photo-1586201375761-83865001e31c?w=1600&q=80"
+            class="d-block w-100 carousel-img" alt="Indian agricultural export">
+          <div class="carousel-overlay"></div>
+        </div>
+      </div>
+
+      <!-- FIX 1: Prev/Next controls (were deleted from your file) -->
+      <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+
+      <!-- Indicator dots -->
+      <div class="carousel-indicators">
+        <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active" aria-current="true"
+          aria-label="Slide 1"></button>
+        <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+        <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+        <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="3" aria-label="Slide 4"></button>
+        <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="4" aria-label="Slide 5"></button>
+      </div>
+    </div>
+
+    <!-- Hero Text Content -->
+    <div class="hero-content">
+      <div class="hero-grain"></div>
+      <div class="hero-content-inner">
+        <h1>India's Finest<br><span class="hero-accent">Agro Products</span><br>At Mandi-Low Prices</h1>
+        <p class="hero-sub">We provide Customers real time prices and show you <strong>real-time lowest prices
+            available</strong></p>
+        <div class="hero-actions">
+          <a href="products.html" class="btn-primary">Explore Products</a>
+          <a href="prices.html" class="btn-ghost">
+            <span class="pulse-dot"></span>
+            Live Prices
+          </a>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="hero-scroll">
+      <span>Scroll to explore</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- TRENDING PRODUCTS (Top 10) -->
+  <!-- TRENDING PRODUCTS (Top 10) -->
+  <section class="products-section" id="products">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">🔥 Trending</div>
+        <h2>Top 10 Products This Week</h2>
+        <p>Our most-enquired exports with live mandi-low pricing</p>
+      </div>
+
+      <div class="products-grid" id="productsGrid">
+
+        <!-- 1 Cumin Seeds -->
+        <div class="product-card" data-cat="spices" data-name="Cumin Seeds">
+          <div class="card-top card-img-top">
+            <img src="https://freshmills.in/cdn/shop/files/cumin-seeds-568171.jpg?v=1717361822&width=1500"
+              alt="Cumin Seeds" class="product-img" loading="lazy">
+            <span class="card-badge">Spices</span>
+          </div>
+          <div class="card-body">
+            <h3>Cumin Seeds</h3>
+            <p class="card-origin">📍 Rajasthan, Gujarat</p>
+            <div class="card-meta"><span>HS: 0909.21</span><span>MOQ: 1 MT</span></div>
+            <div class="card-price-tag">
+              <span class="price-label">Current Mandi Low</span>
+              <span class="price-val" data-product="cumin">₹ —</span>
+              <span class="price-unit">/quintal</span>
+            </div>
+            <button class="btn-enquire" onclick="openEnquiry('Cumin Seeds')">Enquire Now</button>
+          </div>
+        </div>
+
+        <!-- 2 Turmeric -->
+        <div class="product-card" data-cat="spices" data-name="Turmeric">
+          <div class="card-top card-img-top">
+            <img src="https://growhoss.com/cdn/shop/products/turmeric-new2023_800x.jpg?v=1769193170" alt="Turmeric"
+              class="product-img" loading="lazy">
+            <span class="card-badge">Spices</span>
+          </div>
+          <div class="card-body">
+            <h3>Turmeric</h3>
+            <p class="card-origin">📍 Andhra Pradesh, Telangana</p>
+            <div class="card-meta"><span>HS: 0910.30</span><span>MOQ: 500 Kg</span></div>
+            <div class="card-price-tag">
+              <span class="price-label">Current Mandi Low</span>
+              <span class="price-val" data-product="turmeric">₹ —</span>
+              <span class="price-unit">/quintal</span>
+            </div>
+            <button class="btn-enquire" onclick="openEnquiry('Turmeric')">Enquire Now</button>
+          </div>
+        </div>
+
+        <!-- 3 Alphonso Mango -->
+        <div class="product-card" data-cat="fruits" data-name="Alphonso Mango">
+          <div class="card-top card-img-top">
+            <img src="https://ichef.bbci.co.uk/images/ic/1920x1080/p06hk0h6.jpg" alt="Alphonso Mango"
+              class="product-img" loading="lazy">
+            <span class="card-badge">Fruits</span>
+          </div>
+          <div class="card-body">
+            <h3>Alphonso Mango</h3>
+            <p class="card-origin">📍 Ratnagiri, Maharashtra</p>
+            <div class="card-meta"><span>HS: 0804.50</span><span>MOQ: 200 Kg</span></div>
+            <div class="card-price-tag">
+              <span class="price-label">Current Mandi Low</span>
+              <span class="price-val" data-product="mango">₹ —</span>
+              <span class="price-unit">/quintal</span>
+            </div>
+            <button class="btn-enquire" onclick="openEnquiry('Alphonso Mango')">Enquire Now</button>
+          </div>
+        </div>
+
+        <!-- 4 Onion -->
+        <div class="product-card" data-cat="vegetables" data-name="Onion">
+          <div class="card-top card-img-top">
+            <img
+              src="https://arunachalobserver.org/wp-content/uploads/2024/12/full-frame-shot-of-onions-in-market-stall-562386223-59b97e59845b340010f8d76e.jpg"
+              alt="Onion" class="product-img" loading="lazy">
+            <span class="card-badge">Vegetables</span>
+          </div>
+          <div class="card-body">
+            <h3>Onion</h3>
+            <p class="card-origin">📍 Nashik, Lasalgaon</p>
+            <div class="card-meta"><span>HS: 0703.10</span><span>MOQ: 1 MT</span></div>
+            <div class="card-price-tag">
+              <span class="price-label">Current Mandi Low</span>
+              <span class="price-val" data-product="onion">₹ —</span>
+              <span class="price-unit">/quintal</span>
+            </div>
+            <button class="btn-enquire" onclick="openEnquiry('Onion')">Enquire Now</button>
+          </div>
+        </div>
+
+        <!-- 5 Basmati Rice -->
+        <div class="product-card" data-cat="grains" data-name="Basmati Rice">
+          <div class="card-top card-img-top">
+            <img src="https://5.imimg.com/data5/PJ/FW/MY-27318931/fresh-basmati-rice-500x500.jpeg" alt="Basmati Rice"
+              class="product-img" loading="lazy">
+            <span class="card-badge">Grains</span>
+          </div>
+          <div class="card-body">
+            <h3>Basmati Rice</h3>
+            <p class="card-origin">📍 Punjab, Haryana</p>
+            <div class="card-meta"><span>HS: 1006.30</span><span>MOQ: 1 MT</span></div>
+            <div class="card-price-tag">
+              <span class="price-label">Current Mandi Low</span>
+              <span class="price-val" data-product="basmati">₹ —</span>
+              <span class="price-unit">/quintal</span>
+            </div>
+            <button class="btn-enquire" onclick="openEnquiry('Basmati Rice')">Enquire Now</button>
+          </div>
+        </div>
+
+        <!-- 6 Red Chilli -->
+        <div class="product-card" data-cat="spices" data-name="Red Chilli">
+          <div class="card-top card-img-top">
+            <img src="https://vishweshwaraexports.com/assets/uploads/service-7.jpg" alt="Red Chilli" class="product-img"
+              loading="lazy">
+            <span class="card-badge">Spices</span>
+          </div>
+          <div class="card-body">
+            <h3>Red Chilli</h3>
+            <p class="card-origin">📍 Andhra Pradesh, MP</p>
+            <div class="card-meta"><span>HS: 0904.21</span><span>MOQ: 500 Kg</span></div>
+            <div class="card-price-tag">
+              <span class="price-label">Current Mandi Low</span>
+              <span class="price-val" data-product="chilli">₹ —</span>
+              <span class="price-unit">/quintal</span>
+            </div>
+            <button class="btn-enquire" onclick="openEnquiry('Red Chilli')">Enquire Now</button>
+          </div>
+        </div>
+
+        <!-- 7 Pomegranate -->
+        <div class="product-card" data-cat="fruits" data-name="Pomegranate">
+          <div class="card-top card-img-top">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcROYrOBGag9sSsrmCwcH4ZoijryEM-Zbquw1w&s"
+              alt="Pomegranate" class="product-img" loading="lazy">
+            <span class="card-badge">Fruits</span>
+          </div>
+          <div class="card-body">
+            <h3>Pomegranate</h3>
+            <p class="card-origin">📍 Solapur, Nashik</p>
+            <div class="card-meta"><span>HS: 0810.90</span><span>MOQ: 300 Kg</span></div>
+            <div class="card-price-tag">
+              <span class="price-label">Current Mandi Low</span>
+              <span class="price-val" data-product="pomegranate">₹ —</span>
+              <span class="price-unit">/quintal</span>
+            </div>
+            <button class="btn-enquire" onclick="openEnquiry('Pomegranate')">Enquire Now</button>
+          </div>
+        </div>
+
+        <!-- 8 Ginger (replaces Potato) -->
+        <div class="product-card" data-cat="spices" data-name="Ginger">
+          <div class="card-top card-img-top">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSyTRZFlYqY17tqJe8Z7pgrELc5Uo_j1QY-CQ&s"
+              alt="Ginger" class="product-img" loading="lazy">
+            <span class="card-badge">Spices</span>
+          </div>
+          <div class="card-body">
+            <h3>Ginger</h3>
+            <p class="card-origin">📍 Kerala, Karnataka</p>
+            <div class="card-meta"><span>HS: 0910.11</span><span>MOQ: 500 Kg</span></div>
+            <div class="card-price-tag">
+              <span class="price-label">Current Mandi Low</span>
+              <span class="price-val" data-product="ginger">₹ —</span>
+              <span class="price-unit">/quintal</span>
+            </div>
+            <button class="btn-enquire" onclick="openEnquiry('Ginger')">Enquire Now</button>
+          </div>
+        </div>
+
+        <!-- 9 Cashew -->
+        <div class="product-card" data-cat="dryfruits" data-name="Cashew">
+          <div class="card-top spices">
+            <span class="card-emoji">🥜</span>
+            <span class="card-badge">Dry Fruits</span>
+          </div>
+          <div class="card-body">
+            <h3>Cashew (W320)</h3>
+            <p class="card-origin">📍 Goa, Kerala, Karnataka</p>
+            <div class="card-meta"><span>HS: 0801.31</span><span>MOQ: 200 Kg</span></div>
+            <div class="card-price-tag">
+              <span class="price-label">Current Mandi Low</span>
+              <span class="price-val" data-product="cashew">₹ —</span>
+              <span class="price-unit">/quintal</span>
+            </div>
+            <button class="btn-enquire" onclick="openEnquiry('Cashew W320')">Enquire Now</button>
+          </div>
+        </div>
+
+        <!-- 10 Wheat -->
+        <div class="product-card" data-cat="grains" data-name="Wheat">
+          <div class="card-top grains">
+            <span class="card-emoji">🫘</span>
+            <span class="card-badge">Grains</span>
+          </div>
+          <div class="card-body">
+            <h3>Wheat</h3>
+            <p class="card-origin">📍 Punjab, MP, Rajasthan</p>
+            <div class="card-meta"><span>HS: 1001.99</span><span>MOQ: 5 MT</span></div>
+            <div class="card-price-tag">
+              <span class="price-label">Current Mandi Low</span>
+              <span class="price-val" data-product="wheat">₹ —</span>
+              <span class="price-unit">/quintal</span>
+            </div>
+            <button class="btn-enquire" onclick="openEnquiry('Wheat')">Enquire Now</button>
+          </div>
+        </div>
+
+      </div><!-- /products-grid -->
+
+      <!-- Explore All CTA -->
+      <div class="explore-all-wrap">
+        <p class="explore-all-text">Showing <strong>Top 10 Trending</strong> products · We export <strong>200+</strong>
+          products across all categories</p>
+        <a href="products.html" class="btn-explore-all">Explore All Products <span class="btn-arrow">→</span></a>
+      </div>
+
+    </div>
+  </section>
+  </section>
+
+  <!-- WHY CHOOSE US -->
+  <section class="why-section" id="about">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">Why Us</div>
+        <h2>The AgroReach Advantage</h2>
+      </div>
+      <div class="why-grid">
+        <div class="why-card">
+          <div class="why-icon">💰</div>
+          <h3>Transparent Mandi Pricing</h3>
+          <p>We show you the real lowest price available in Indian mandis so you know you're getting a fair deal — no
+            inflated quotes.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon">🌍</div>
+          <h3>40+ Countries Served</h3>
+          <p>From UAE to the UK, USA to Africa — we handle documentation, phytosanitary, and logistics end-to-end.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon">✅</div>
+          <h3>Certified Quality</h3>
+          <p>All products are APEDA registered and carry FSSAI, ISO 22000, and phytosanitary certifications.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon">🚢</div>
+          <h3>End-to-End Logistics</h3>
+          <p>We manage packaging, cold chain, freight forwarding and customs clearance in 40+ destination countries.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon">⚡</div>
+          <h3>Fast Response</h3>
+          <p>Our team responds within 2 hours on WhatsApp or email — no waiting weeks for a quote.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon">🤝</div>
+          <h3>Direct Farm Sourcing</h3>
+          <p>We work with farmer producer organisations (FPOs) directly, cutting out middlemen and ensuring freshness.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CERTIFICATIONS -->
+  <section class="cert-section" id="certifications">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">Trust</div>
+        <h2>Our Certifications</h2>
+        <p>Internationally recognised quality assurance</p>
+      </div>
+      <div class="cert-grid">
+        <div class="cert-card">
+          <div class="cert-logo">APEDA</div>
+          <p>Agricultural & Processed Food Products Export Development Authority</p>
+        </div>
+        <div class="cert-card">
+          <div class="cert-logo">FSSAI</div>
+          <p>Food Safety and Standards Authority of India</p>
+        </div>
+        <div class="cert-card">
+          <div class="cert-logo">ISO<br>22000</div>
+          <p>Food Safety Management System Certified</p>
+        </div>
+        <div class="cert-card">
+          <div class="cert-logo">Phyto</div>
+          <p>Phytosanitary Certificates for all plant-based exports</p>
+        </div>
+        <div class="cert-card">
+          <div class="cert-logo">SPICE<br>BOARD</div>
+          <p>Registered Exporter with Spices Board of India</p>
+        </div>
+        <div class="cert-card">
+          <div class="cert-logo">IEC</div>
+          <p>Import Export Code — DGFT Registered</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPORT COUNTRIES -->
+  <section class="countries-section">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">Global</div>
+        <h2>We Export To</h2>
+      </div>
+      <div class="flags-grid">
+        <div class="flag-item">🇦🇪 UAE</div>
+        <div class="flag-item">🇸🇦 Saudi Arabia</div>
+        <div class="flag-item">🇺🇸 USA</div>
+        <div class="flag-item">🇬🇧 UK</div>
+        <div class="flag-item">🇨🇦 Canada</div>
+        <div class="flag-item">🇦🇺 Australia</div>
+        <div class="flag-item">🇩🇪 Germany</div>
+        <div class="flag-item">🇸🇬 Singapore</div>
+        <div class="flag-item">🇲🇾 Malaysia</div>
+        <div class="flag-item">🇿🇦 South Africa</div>
+        <div class="flag-item">🇳🇱 Netherlands</div>
+        <div class="flag-item">🇯🇵 Japan</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="contact-section" id="contact">
+    <div class="container contact-inner">
+      <div class="contact-left">
+        <div class="section-tag">Let's Talk</div>
+        <h2>Request a Quote</h2>
+        <p>Fill in the form and our team will get back to you within 2 hours. You can also reach us directly.</p>
+        <div class="contact-details">
+          <div class="contact-item"><span>📧</span><span>exports@agroreach.in</span></div>
+          <div class="contact-item"><span>📞</span><span>+91 97143 14179</span></div>
+          <div class="contact-item"><span>📍</span><span>Ahmedabad, Gujarat, India</span></div>
+        </div>
+        <a href="https://wa.me/919876543210" class="btn-whatsapp" target="_blank">
+          <span> <img src="https://play-lh.googleusercontent.com/bYtqbOcTYOlgc6gqZ2rwb8lptHuwlNE75zYJu6Bn076-hTmvd96HH-6v7S0YUAAJXoJN" alt="WhatsApp"   height="50px"> </span> Chat on WhatsApp
+        </a>
+      </div>
+      <div class="contact-right">
+        <form class="enquiry-form" id="enquiryForm" onsubmit="submitForm(event)">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Your Name *</label>
+              <input type="text" id="fName" placeholder="John Smith" required />
+            </div>
+            <div class="form-group">
+              <label>Company Name</label>
+              <input type="text" id="fCompany" placeholder="Acme Trading Ltd" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Email *</label>
+              <input type="email" id="fEmail" placeholder="john@company.com" required />
+            </div>
+            <div class="form-group">
+              <label>Country *</label>
+              <input type="text" id="fCountry" placeholder="UAE, UK, USA..." required />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Product Interested In *</label>
+            <input type="text" id="fProduct" placeholder="e.g. Cumin Seeds, Basmati Rice..." required />
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Quantity Required</label>
+              <input type="text" id="fQty" placeholder="e.g. 5 MT, 500 Kg" />
+            </div>
+            <div class="form-group">
+              <label>Packaging Preference</label>
+              <select id="fPack">
+                <option value="">Select</option>
+                <option>5 Kg Bags</option>
+                <option>10 Kg Bags</option>
+                <option>25 Kg Bags</option>
+                <option>50 Kg Bags</option>
+                <option>Bulk / Custom</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Additional Message</label>
+            <textarea id="fMsg" rows="3" placeholder="Any special requirements, certifications needed, etc."></textarea>
+          </div>
+          <button type="submit" class="btn-submit">Send Enquiry →</button>
+          <p class="form-note">* We reply within 2 hours on business days</p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <span class="logo">🌾 AgroReach <em>India</em></span>
+        <p>Premium Indian agricultural exports delivered worldwide with transparent pricing.</p>
+        <div class="social-links">
+          <a href="#">LinkedIn</a>
+          <a href="#">WhatsApp</a>
+          <a href="#">Email</a>
+        </div>
+      </div>
+      <div class="footer-links">
+        <h4>Products</h4>
+        <a href="products.html">All Products</a>
+        <a href="products.html">Spices</a>
+        <a href="products.html">Fruits</a>
+        <a href="products.html">Vegetables</a>
+        <a href="products.html">Grains & Pulses</a>
+      </div>
+      <div class="footer-links">
+        <h4>Company</h4>
+        <a href="#about">About Us</a>
+        <a href="#certifications">Certifications</a>
+        <a href="prices.html">Live Prices</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <div class="footer-links">
+        <h4>Certifications</h4>
+        <span>APEDA Registered</span>
+        <span>FSSAI Certified</span>
+        <span>ISO 22000:2018</span>
+        <span>IEC Registered</span>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 AgroReach India. All rights reserved. | Ahmedabad, Gujarat, India</p>
+      <p>Mandi prices are indicative lowest values. Actual export prices may vary based on quality, quantity, and market
+        conditions.</p>
+    </div>
+  </footer>
+
+  <!-- ENQUIRY MODAL -->
+  <div class="modal-overlay" id="modalOverlay" onclick="closeModal()">
+    <div class="modal" onclick="event.stopPropagation()">
+      <button class="modal-close" onclick="closeModal()">✕</button>
+      <h3>Quick Enquiry</h3>
+      <p id="modalProductName"></p>
+      <input type="text" placeholder="Your Name" id="mName" />
+      <input type="email" placeholder="Your Email" id="mEmail" />
+      <input type="text" placeholder="Country" id="mCountry" />
+      <input type="text" placeholder="Quantity Required (e.g. 2 MT)" id="mQty" />
+      <button onclick="submitModal()" class="btn-submit" style="width:100%;margin-top:8px">Send Enquiry →</button>
+    </div>
+  </div>
+
+  <!-- WHATSAPP FLOAT -->
+  <a href="https://wa.me/9714314179" class="wa-float" target="_blank" title="Chat on WhatsApp"> <img src="https://play-lh.googleusercontent.com/bYtqbOcTYOlgc6gqZ2rwb8lptHuwlNE75zYJu6Bn076-hTmvd96HH-6v7S0YUAAJXoJN" alt="Chat on WhatsApp" /> </a>
+
+  <!-- FIX 3: Bootstrap JS MUST come BEFORE app.js so carousel initialises first -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="app.js"></script>
+</body>
+
+</html>
