@@ -92,7 +92,7 @@ sequenceDiagram
     autonumber
     actor Mandi as APMC Mandi Auctions
     participant Govt as Govt Portals (Agmarknet/Data.gov)
-    participant Scraper as Python ETL Pipeline (claude_scraper.py)
+    participant Scraper as Python ETL Pipeline (scraper.py)
     participant Data as Persistence Layer (prices.json)
     participant Web as Web Client (app.js)
     actor Buyer as Global Agricultural Buyer
@@ -199,13 +199,13 @@ Export Website/
 ├── style.css                  # Unified responsive design system and CSS variables
 ├── app.js                     # Core DOM controller: search, filter, ticker, quote modal
 │
-├── claude_scraper.py          # Primary production scraper with statistical outlier cleaning
-├── scraper.py                 # Baseline scraper with multi-endpoint resolution
-├── kimi_scraper.py            # Async concurrent aiohttp scraper with retry policies
+├── scraper.py                 # Primary production scraper with statistical outlier cleaning
+├── async_scraper.py           # High-concurrency async scraper with aiohttp & retry backoff
 │
 ├── commodities.json           # Master dictionary of commodities and search aliases
 ├── prices.json                # Production live price cache hydrated into the UI
-└── prices_20260330_0003.json  # Validated reference snapshot (38 verified commodities)
+├── sample_prices.json         # Validated reference snapshot (38 verified commodities)
+└── docs/                      # Supplementary documentation & asset references
 ```
 
 ---
@@ -223,8 +223,8 @@ Export Website/
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/<your-username>/<repo-name>.git
-cd <repo-name>
+git clone https://github.com/Jadav-Divyaraj/agri-mandi-price-engine.git
+cd agri-mandi-price-engine
 ```
 
 ### 2. Configure Python Environment
@@ -241,7 +241,7 @@ pip install -r requirements.txt
 ### 3. Run the Scraping & Cleansing Pipeline
 ```bash
 # Execute the production cleaner and scraper
-python claude_scraper.py
+python scraper.py
 ```
 *Output: Refreshed, validated mandi prices written directly to `prices.json`.*
 

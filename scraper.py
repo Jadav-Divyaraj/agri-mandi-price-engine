@@ -1,463 +1,364 @@
 """
-AgroReach India - Complete Mandi Price Scraper
-Uses data.gov.in API and agmarknet endpoints for accurate pricing
+AgroReach India — Mandi Price Extraction & Statistical Cleansing Engine
+
+Overview:
+Aggregates wholesale commodity rates from official Indian market networks
+(Agmarknet and Open Government Data Platform - data.gov.in).
+
+Key Pipeline Steps:
+1. Multi-Source Ingestion: Primary API query with secondary HTML fallback.
+2. Anomaly Elimination: Range validation table (PRICE_RANGE) to resolve unit
+   mismatches (e.g., kg vs quintal).
+3. Statistical Outlier Rejection: Dynamic median and standard deviation (2.5 sigma)
+   filtering to eliminate data entry noise.
+4. Temporal Fallback: Sliding 5-day window for market closures and holidays.
 """
 
-import os
 import requests
 import json
+import os
 import time
-import re
+import statistics
 from datetime import datetime, timedelta
-from typing import Dict, List, Optional, Tuple
-import logging
-import argparse
-import sys
+from bs4 import BeautifulSoup
 
-# Setup logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s',
-    handlers=[
-        logging.StreamHandler(sys.stdout)
-    ]
-)
-logger = logging.getLogger(__name__)
+API_KEY      = os.getenv("DATA_GOV_API_KEY", "579b464db66ec23bdd000001bf3ce4c4217e41dd6d3a8741ba5e176e")
+OUTPUT_FILE  = "prices.json"
+HISTORY_FILE = "price_history.json"
+TIMEOUT      = 30
+MAX_DAYS     = 5
 
-class MandiPriceScraper:
-    """Complete scraper for Indian mandi prices using multiple data sources"""
-    
-    def __init__(self, api_key: str = None):
-        self.api_key = api_key or os.getenv("DATA_GOV_API_KEY", "579b464db66ec23bdd000001bf3ce4c4217e41dd6d3a8741ba5e176e")
-        self.session = requests.Session()
-        self.session.headers.update({
-            "User-Agent": "AgroReach India/1.0 (https://agroreach.in)",
-            "Accept": "application/json, text/plain, */*",
-            "Referer": "https://agmarknet.gov.in/",
-        })
-        
-        # API endpoints
-        self.endpoints = {
-            "data_gov": "https://api.data.gov.in/resource/",
-            "agmarknet_api": "https://api.agmarket.gov.in/v1/",
-            "agmarknet_legacy": "https://agmarknet.gov.in/api/PriceData",
-        }
-    
-    def get_commodity_data_gov(self, commodity: str, state: str = None) -> Optional[Dict]:
-        """Fetch price data from data.gov.in API"""
-        try:
-            # data.gov.in resource IDs for market prices
-            resource_ids = [
-                "9ef84268-d588-465a-a308-a864a43d0070",  # Market prices
-                "de3dbf1d-2a6d-46f0-a4f1-0f4b301b3de4",  # Commodity prices
-            ]
-            
-            for resource_id in resource_ids:
-                params = {
-                    "api-key": self.api_key,
-                    "format": "json",
-                    "limit": "50",
-                }
-                
-                # Add filter if provided
-                if commodity:
-                    params["filters[commodity]"] = commodity
-                if state:
-                    params["filters[state]"] = state
-                
-                response = self.session.get(
-                    f"{self.endpoints['data_gov']}{resource_id}",
-                    params=params,
-                    timeout=15
-                )
-                
-                if response.status_code == 200:
-                    try:
-                        data = response.json()
-                        if data.get('records'):
-                            return self._process_data_gov_response(data['records'])
-                    except:
-                        continue
-                        
-        except Exception as e:
-            logger.debug(f"data.gov.in error for {commodity}: {e}")
-        
-        return None
-    
-    def get_commodity_agmarknet(self, commodity: str, date: str = None) -> Optional[Dict]:
-        """Fetch price data from agmarknet API"""
-        if not date:
-            date = datetime.now().strftime("%Y-%m-%d")
-        
-        try:
-            # Try multiple parameter formats
-            param_formats = [
-                {"commodity": commodity, "date": date},
-                {"q": commodity, "dt": date},
-                {"name": commodity, "date": date},
-            ]
-            
-            for params in param_formats:
-                response = self.session.get(
-                    self.endpoints['agmarknet_legacy'],
-                    params=params,
-                    timeout=15
-                )
-                
-                if response.status_code == 200:
-                    # Try to parse JSON
-                    try:
-                        data = response.json()
-                        if data:
-                            return self._process_agmarknet_response(data, commodity)
-                    except:
-                        # If not JSON, try to extract from HTML
-                        if response.text and ('price' in response.text.lower() or 'modal' in response.text.lower()):
-                            result = self._extract_from_html(response.text, commodity)
-                            if result:
-                                return result
-                        
-        except Exception as e:
-            logger.debug(f"agmarknet API error for {commodity}: {e}")
-        
-        return None
-    
-    def _process_data_gov_response(self, records: List) -> Dict:
-        """Process data.gov.in API response"""
-        prices = []
-        for record in records:
-            try:
-                # Try different field names
-                modal_price = (record.get('modal_price') or 
-                              record.get('price') or 
-                              record.get('avg_price') or 
-                              record.get('modal'))
-                
-                if modal_price:
-                    # Convert to float if string
-                    if isinstance(modal_price, str):
-                        modal_price = float(modal_price.replace(',', ''))
-                    
-                    min_price = record.get('min_price', modal_price)
-                    max_price = record.get('max_price', modal_price)
-                    
-                    if isinstance(min_price, str):
-                        min_price = float(min_price.replace(',', ''))
-                    if isinstance(max_price, str):
-                        max_price = float(max_price.replace(',', ''))
-                    
-                    prices.append({
-                        "market": record.get('market', record.get('market_name', 'Unknown')),
-                        "state": record.get('state', record.get('state_name', 'Unknown')),
-                        "district": record.get('district', 'Unknown'),
-                        "min_price": float(min_price),
-                        "max_price": float(max_price),
-                        "modal_price": float(modal_price),
-                        "arrivals": record.get('arrivals', record.get('arrival', 0))
-                    })
-            except (ValueError, TypeError, KeyError) as e:
-                continue
-        
-        if prices:
-            return self._calculate_price_stats(prices)
-        return None
-    
-    def _process_agmarknet_response(self, data: Dict, commodity: str) -> Optional[Dict]:
-        """Process agmarknet API response"""
-        if isinstance(data, dict):
-            # Try different data structures
-            if 'prices' in data:
-                return self._calculate_price_stats(data['prices'])
-            elif 'data' in data:
-                return self._calculate_price_stats(data['data'])
-            elif 'records' in data:
-                return self._calculate_price_stats(data['records'])
-            else:
-                # If direct price data
-                modal = data.get('modal_price') or data.get('price') or data.get('modal')
-                if modal:
-                    return {
-                        "min_price": int(data.get('min_price', modal)),
-                        "max_price": int(data.get('max_price', modal)),
-                        "modal_price": int(modal),
-                        "unit": "quintal",
-                        "markets_count": 1
-                    }
-        return None
-    
-    def _extract_from_html(self, html: str, commodity: str) -> Optional[Dict]:
-        """Extract price data from HTML response"""
-        # Look for price patterns in HTML
-        prices = []
-        
-        # Pattern 1: Table cells with prices
-        table_pattern = r'<td[^>]*>([\d,]+)\s*<\/td>\s*<td[^>]*>quintal'
-        matches = re.findall(table_pattern, html, re.IGNORECASE)
-        for match in matches:
-            try:
-                price = float(match.replace(',', ''))
-                if 100 < price < 200000:  # Reasonable price range
-                    prices.append(price)
-            except:
-                continue
-        
-        # Pattern 2: JSON-like structures
-        json_pattern = r'"price"\s*:\s*([\d.]+)'
-        matches = re.findall(json_pattern, html)
-        for match in matches:
-            try:
-                price = float(match)
-                if 100 < price < 200000:
-                    prices.append(price)
-            except:
-                continue
-        
-        # Pattern 3: ₹ symbol followed by number
-        rupee_pattern = r'[₹]\s*([\d,]+)'
-        matches = re.findall(rupee_pattern, html)
-        for match in matches:
-            try:
-                price = float(match.replace(',', ''))
-                if 100 < price < 200000:
-                    prices.append(price)
-            except:
-                continue
-        
-        if prices:
-            return {
-                "min_price": int(min(prices)),
-                "max_price": int(max(prices)),
-                "modal_price": int(min(prices)),  # Use lowest as modal
-                "unit": "quintal",
-                "source": "html_extract",
-                "markets_count": len(prices)
-            }
-        return None
-    
-    def _calculate_price_stats(self, prices: List[Dict]) -> Dict:
-        """Calculate min, max, and modal prices from price list"""
-        if not prices:
-            return None
-        
-        modal_prices = []
-        min_prices = []
-        max_prices = []
-        
-        for p in prices:
-            # Handle both dict and numeric values
-            if isinstance(p, dict):
-                modal = p.get('modal_price') or p.get('price') or p.get('modal')
-                min_p = p.get('min_price', modal)
-                max_p = p.get('max_price', modal)
-            else:
-                modal = p
-                min_p = p
-                max_p = p
-            
-            if modal and float(modal) > 0:
-                try:
-                    modal_prices.append(float(modal))
-                    if min_p:
-                        min_prices.append(float(min_p))
-                    if max_p:
-                        max_prices.append(float(max_p))
-                except (ValueError, TypeError):
-                    continue
-        
-        if not modal_prices:
-            return None
-        
-        # Find lowest modal price (best deal for buyer)
-        lowest_modal = min(modal_prices)
-        
-        # Find market with lowest price if available
-        lowest_market = None
-        for p in prices:
-            if isinstance(p, dict):
-                modal = p.get('modal_price') or p.get('price') or p.get('modal')
-                if modal and float(modal) == lowest_modal:
-                    lowest_market = p.get('market', p.get('market_name', 'Unknown'))
-                    break
-        
-        return {
-            "min_price": int(min(min_prices)) if min_prices else int(lowest_modal),
-            "max_price": int(max(max_prices)) if max_prices else int(lowest_modal),
-            "modal_price": int(lowest_modal),
-            "lowest_market": lowest_market,
-            "markets_count": len(modal_prices),
-            "unit": "quintal"
-        }
+# Realistic price ranges per commodity (Rs/quintal).
+# Prices outside these are garbage data — filtered out.
+PRICE_RANGE = {
+    "cumin":         (15000, 60000),
+    "turmeric":      (5000,  30000),
+    "chilli":        (3000,  40000),
+    "coriander":     (4000,  20000),
+    "pepper":        (30000, 100000),
+    "cardamom":      (80000, 300000),
+    "ginger":        (3000,  25000),
+    "garlic":        (2000,  50000),
+    "mustard":       (4000,  10000),
+    "fenugreek":     (3000,  12000),
+    "fennel":        (5000,  20000),
+    "ajwain":        (8000,  30000),
+    "mango":         (500,   80000),
+    "pomegranate":   (3000,  40000),
+    "grapes":        (1000,  20000),
+    "banana":        (500,   8000),
+    "apple":         (2000,  20000),
+    "coconut":       (1000,  8000),
+    "watermelon":    (200,   3000),
+    "orange":        (500,   10000),
+    "papaya":        (300,   5000),
+    "guava":         (400,   5000),
+    "onion":         (200,   8000),
+    "potato":        (200,   5000),
+    "tomato":        (100,   8000),
+    "greenchilli":   (500,   15000),
+    "cauliflower":   (200,   4000),
+    "capsicum":      (500,   8000),
+    "carrot":        (300,   5000),
+    "brinjal":       (100,   4000),
+    "ladyfinger":    (500,   8000),
+    "peas":          (500,   10000),
+    "basmati":       (2000,  12000),
+    "wheat":         (1800,  4000),
+    "maize":         (1200,  4000),
+    "chana":         (3000,  10000),
+    "soybean":       (3000,  8000),
+    "tur":           (5000,  15000),
+    "moong":         (5000,  15000),
+    "urad":          (5000,  15000),
+    "masoor":        (4000,  12000),
+    "bajra":         (1500,  4000),
+    "rajma":         (6000,  20000),
+    "jowar":         (1500,  5000),
+    "cashew":        (50000, 200000),
+    "almonds":       (40000, 120000),
+    "walnut":        (50000, 150000),
+    "raisins":       (8000,  30000),
+    "dates":         (5000,  25000),
+    "groundnut":     (4000,  10000),
+    "sesame":        (8000,  25000),
+    "castorseed":    (4000,  10000),
+    "sunflowerseed": (3000,  8000),
+    "copra":         (8000,  25000),
+    "cottonseed":    (2000,  7000),
+    "coffee":        (15000, 80000),
+    "rubber":        (12000, 25000),
+    "marigold":      (200,   4000),
+    "sugarcane":     (200,   600),
+    "honey":         (5000,  25000),
+}
 
-# Complete commodity mapping matching your website
 COMMODITIES = {
     "spices": [
-        {"key": "cumin", "name": "Cumin Seeds", "api_names": ["Jeera", "Cumin"]},
-        {"key": "turmeric", "name": "Turmeric", "api_names": ["Turmeric"]},
-        {"key": "chilli", "name": "Red Chilli", "api_names": ["Dry Chillies", "Red Chilli"]},
-        {"key": "coriander", "name": "Coriander Seeds", "api_names": ["Coriander"]},
-        {"key": "pepper", "name": "Black Pepper", "api_names": ["Black Pepper"]},
-        {"key": "cardamom", "name": "Cardamom", "api_names": ["Cardamom"]},
-        {"key": "ginger", "name": "Ginger (Dry)", "api_names": ["Ginger"]},
-        {"key": "garlic", "name": "Garlic", "api_names": ["Garlic"]},
-        {"key": "mustard", "name": "Mustard Seeds", "api_names": ["Mustard"]},
-        {"key": "fenugreek", "name": "Fenugreek", "api_names": ["Fenugreek", "Methi"]},
-        {"key": "fennel", "name": "Fennel Seeds", "api_names": ["Fennel", "Saunf"]},
-        {"key": "ajwain", "name": "Ajwain", "api_names": ["Ajwain", "Carom"]},
+        {"key":"cumin",     "name":"Cumin Seeds",       "agmark":"Jeera"},
+        {"key":"turmeric",  "name":"Turmeric",          "agmark":"Turmeric"},
+        {"key":"chilli",    "name":"Red Chilli",        "agmark":"Dry Chillies"},
+        {"key":"coriander", "name":"Coriander Seeds",   "agmark":"Coriander"},
+        {"key":"pepper",    "name":"Black Pepper",      "agmark":"Black pepper"},
+        {"key":"cardamom",  "name":"Cardamom",          "agmark":"Cardamom"},
+        {"key":"ginger",    "name":"Ginger (Dry)",      "agmark":"Ginger(Dry)"},
+        {"key":"garlic",    "name":"Garlic",            "agmark":"Garlic"},
+        {"key":"mustard",   "name":"Mustard Seeds",     "agmark":"Mustard"},
+        {"key":"fenugreek", "name":"Fenugreek",         "agmark":"Methi"},
+        {"key":"fennel",    "name":"Fennel Seeds",      "agmark":"Saunf"},
+        {"key":"ajwain",    "name":"Ajwain",            "agmark":"Ajwan"},
     ],
     "fruits": [
-        {"key": "mango", "name": "Alphonso Mango", "api_names": ["Mango"]},
-        {"key": "pomegranate", "name": "Pomegranate", "api_names": ["Pomegranate"]},
-        {"key": "grapes", "name": "Grapes", "api_names": ["Grapes"]},
-        {"key": "banana", "name": "Banana", "api_names": ["Banana"]},
-        {"key": "apple", "name": "Apple", "api_names": ["Apple"]},
-        {"key": "coconut", "name": "Coconut", "api_names": ["Coconut"]},
-        {"key": "orange", "name": "Orange", "api_names": ["Orange"]},
-        {"key": "papaya", "name": "Papaya", "api_names": ["Papaya"]},
-        {"key": "guava", "name": "Guava", "api_names": ["Guava"]},
-        {"key": "watermelon", "name": "Watermelon", "api_names": ["Watermelon"]},
+        {"key":"mango",       "name":"Mango",           "agmark":"Mango"},
+        {"key":"pomegranate", "name":"Pomegranate",     "agmark":"Pomegranate"},
+        {"key":"grapes",      "name":"Grapes",          "agmark":"Grapes"},
+        {"key":"banana",      "name":"Banana",          "agmark":"Banana"},
+        {"key":"apple",       "name":"Apple",           "agmark":"Apple"},
+        {"key":"coconut",     "name":"Coconut",         "agmark":"Coconut"},
+        {"key":"watermelon",  "name":"Watermelon",      "agmark":"Water Melon"},
+        {"key":"orange",      "name":"Orange",          "agmark":"Orange"},
+        {"key":"papaya",      "name":"Papaya",          "agmark":"Papaya"},
+        {"key":"guava",       "name":"Guava",           "agmark":"Guava"},
     ],
     "vegetables": [
-        {"key": "onion", "name": "Onion", "api_names": ["Onion"]},
-        {"key": "potato", "name": "Potato", "api_names": ["Potato"]},
-        {"key": "tomato", "name": "Tomato", "api_names": ["Tomato"]},
-        {"key": "greenchilli", "name": "Green Chilli", "api_names": ["Green Chilli"]},
-        {"key": "cauliflower", "name": "Cauliflower", "api_names": ["Cauliflower"]},
-        {"key": "carrot", "name": "Carrot", "api_names": ["Carrot"]},
-        {"key": "capsicum", "name": "Capsicum", "api_names": ["Capsicum"]},
-        {"key": "brinjal", "name": "Brinjal", "api_names": ["Brinjal"]},
-        {"key": "ladyfinger", "name": "Lady Finger", "api_names": ["Bhindi", "Lady Finger"]},
+        {"key":"onion",       "name":"Onion",           "agmark":"Onion"},
+        {"key":"potato",      "name":"Potato",          "agmark":"Potato"},
+        {"key":"tomato",      "name":"Tomato",          "agmark":"Tomato"},
+        {"key":"greenchilli", "name":"Green Chilli",    "agmark":"Green Chilli"},
+        {"key":"cauliflower", "name":"Cauliflower",     "agmark":"Cauliflower"},
+        {"key":"capsicum",    "name":"Capsicum",        "agmark":"Capsicum"},
+        {"key":"carrot",      "name":"Carrot",          "agmark":"Carrot"},
+        {"key":"brinjal",     "name":"Brinjal",         "agmark":"Brinjal"},
+        {"key":"ladyfinger",  "name":"Lady Finger",     "agmark":"Bhindi(Ladies Finger)"},
+        {"key":"peas",        "name":"Green Peas",      "agmark":"Green Peas"},
     ],
     "grains": [
-        {"key": "basmati", "name": "Basmati Rice", "api_names": ["Basmati", "Rice"]},
-        {"key": "wheat", "name": "Wheat", "api_names": ["Wheat"]},
-        {"key": "maize", "name": "Maize", "api_names": ["Maize"]},
-        {"key": "chana", "name": "Chana (Gram)", "api_names": ["Gram", "Chana"]},
-        {"key": "soybean", "name": "Soybean", "api_names": ["Soybean"]},
-        {"key": "tur", "name": "Tur Dal", "api_names": ["Tur", "Arhar"]},
-        {"key": "moong", "name": "Moong Dal", "api_names": ["Moong"]},
-        {"key": "urad", "name": "Urad Dal", "api_names": ["Urad"]},
-        {"key": "bajra", "name": "Bajra", "api_names": ["Bajra"]},
-        {"key": "jowar", "name": "Jowar", "api_names": ["Jowar"]},
+        {"key":"basmati",  "name":"Basmati Rice",       "agmark":"Rice"},
+        {"key":"wheat",    "name":"Wheat",              "agmark":"Wheat"},
+        {"key":"maize",    "name":"Maize",              "agmark":"Maize"},
+        {"key":"chana",    "name":"Chana (Gram)",       "agmark":"Gram"},
+        {"key":"soybean",  "name":"Soybean",            "agmark":"Soyabean"},
+        {"key":"tur",      "name":"Tur Dal",            "agmark":"Tur"},
+        {"key":"moong",    "name":"Moong Dal",          "agmark":"Moong (Whole)"},
+        {"key":"urad",     "name":"Urad Dal",           "agmark":"Black Gram (Urd Beans)(Whole)"},
+        {"key":"masoor",   "name":"Masoor Dal",         "agmark":"Masur Dal"},
+        {"key":"bajra",    "name":"Bajra",              "agmark":"Bajra(Pearl Millet/Cumbu)"},
+        {"key":"rajma",    "name":"Rajma",              "agmark":"Rajma (Kidney Beans)"},
+        {"key":"jowar",    "name":"Jowar",              "agmark":"Jowar(Sorghum)"},
     ],
     "dryfruits": [
-        {"key": "cashew", "name": "Cashew W320", "api_names": ["Cashew"]},
-        {"key": "almonds", "name": "Almonds", "api_names": ["Almond"]},
-        {"key": "raisins", "name": "Raisins", "api_names": ["Raisins", "Dry Grapes"]},
-        {"key": "walnut", "name": "Walnut", "api_names": ["Walnut"]},
-        {"key": "dates", "name": "Dates", "api_names": ["Dates"]},
+        {"key":"cashew",  "name":"Cashew W320",         "agmark":"Cashewnuts"},
+        {"key":"almonds", "name":"Almonds",             "agmark":"Almond"},
+        {"key":"walnut",  "name":"Walnut",              "agmark":"Walnut"},
+        {"key":"raisins", "name":"Raisins",             "agmark":"Dry Grapes"},
+        {"key":"dates",   "name":"Dates",               "agmark":"Dates"},
     ],
     "oils": [
-        {"key": "groundnut", "name": "Groundnut", "api_names": ["Groundnut"]},
-        {"key": "sesame", "name": "Sesame Seeds", "api_names": ["Sesame", "Til"]},
-        {"key": "castorseed", "name": "Castor Seed", "api_names": ["Castor"]},
-        {"key": "sunflowerseed", "name": "Sunflower Seed", "api_names": ["Sunflower"]},
+        {"key":"groundnut",     "name":"Groundnut",     "agmark":"Groundnut"},
+        {"key":"sesame",        "name":"Sesame Seeds",  "agmark":"Sesamum(Sesame,Gingelly,Til)"},
+        {"key":"castorseed",    "name":"Castor Seed",   "agmark":"Castor Seed"},
+        {"key":"sunflowerseed", "name":"Sunflower Seed","agmark":"Sunflower"},
+        {"key":"copra",         "name":"Copra",         "agmark":"Copra"},
+        {"key":"cottonseed",    "name":"Cotton Seed",   "agmark":"Cotton"},
+    ],
+    "others": [
+        {"key":"coffee",    "name":"Coffee",            "agmark":"Coffee"},
+        {"key":"rubber",    "name":"Rubber",            "agmark":"Rubber"},
+        {"key":"marigold",  "name":"Marigold",          "agmark":"Marigold(Loose)"},
+        {"key":"sugarcane", "name":"Sugarcane",         "agmark":"Sugarcane"},
+        {"key":"honey",     "name":"Honey",             "agmark":"Honey"},
     ],
 }
 
-def scrape_all_prices(api_key: str = None, output_file: str = "prices.json"):
-    """Scrape prices for all commodities"""
-    
-    print("="*70)
-    print("AgroReach India - Complete Mandi Price Scraper")
-    print(f"Started: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-    print("="*70)
-    
-    scraper = MandiPriceScraper(api_key)
-    
-    # Prepare output
+
+def is_valid(key, price):
+    lo, hi = PRICE_RANGE.get(key, (50, 999999))
+    return lo <= price <= hi
+
+
+def clean_and_aggregate(key, triples):
+    """Filter bad records, remove outliers, return best price."""
+    valid = [(mn, mx, mo) for mn, mx, mo in triples
+             if is_valid(key, mo) and mn > 0 and mx > 0]
+    if not valid:
+        return None
+    if len(valid) >= 5:
+        modals = [mo for _, _, mo in valid]
+        med    = statistics.median(modals)
+        sd     = statistics.stdev(modals) if len(modals) > 1 else med * 0.3
+        valid  = [(mn, mx, mo) for mn, mx, mo in valid
+                  if abs(mo - med) <= 2.5 * max(sd, med * 0.2)]
+    if not valid:
+        return None
+    return {
+        "min":     int(min(mn for mn, _, _ in valid)),
+        "max":     int(max(mx for _, mx, _ in valid)),
+        "modal":   int(min(mo for _, _, mo in valid)),
+        "markets": len(valid),
+    }
+
+
+# ── Source 1: data.gov.in API ─────────────────────────────
+API_URL = "https://api.data.gov.in/resource/9ef84268-d588-465a-a308-a864a43d0070"
+
+def fetch_api(key, agmark):
+    for days in range(MAX_DAYS):
+        date = (datetime.now() - timedelta(days=days)).strftime("%d/%m/%Y")
+        try:
+            r = requests.get(API_URL, params={
+                "api-key": API_KEY, "format": "json", "limit": 500,
+                "filters[Commodity]": agmark,
+                "filters[Arrival_Date]": date,
+            }, timeout=TIMEOUT)
+            r.raise_for_status()
+            recs = r.json().get("records", [])
+            triples = []
+            for rec in recs:
+                try:
+                    mn = float(rec.get("Min_Price")   or 0)
+                    mx = float(rec.get("Max_Price")   or 0)
+                    mo = float(rec.get("Modal_Price") or 0)
+                    if mo > 0:
+                        triples.append((mn, mx, mo))
+                except (ValueError, TypeError):
+                    pass
+            res = clean_and_aggregate(key, triples)
+            if res:
+                res["date"] = date
+                res["source"] = "data.gov.in"
+                return res
+        except requests.Timeout:
+            print("(timeout)", end=" ", flush=True)
+        except Exception:
+            pass
+        time.sleep(0.3)
+    return None
+
+
+# ── Source 2: agmarknet.gov.in HTML scrape ────────────────
+AGMK_URL = "https://agmarknet.gov.in/SearchCmmMkt.aspx"
+HDR = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+       "Accept-Language": "en-IN,en;q=0.9"}
+
+def fetch_agmarknet(key, agmark):
+    for days in range(3):
+        ds = (datetime.now() - timedelta(days=days)).strftime("%d-%b-%Y")
+        try:
+            r = requests.get(AGMK_URL, headers=HDR, timeout=TIMEOUT, params={
+                "Tx_Commodity":"0","Tx_State":"0","Tx_District":"0","Tx_Market":"0",
+                "DateFrom":ds,"DateTo":ds,"Fr_Date":ds,"To_Date":ds,"Tx_Trend":"0",
+                "Tx_CommodityHead":agmark,"Tx_StateHead":"--Select--",
+                "Tx_DistrictHead":"--Select--","Tx_MarketHead":"--Select--",
+            })
+            soup  = BeautifulSoup(r.text, "html.parser")
+            table = soup.find("table", {"id":"cphBody_GridPriceData"})
+            if not table:
+                time.sleep(1)
+                continue
+            triples = []
+            for row in table.find_all("tr")[1:]:
+                cols = [td.get_text(strip=True) for td in row.find_all("td")]
+                if len(cols) >= 9:
+                    try:
+                        mn = float(cols[6].replace(",",""))
+                        mx = float(cols[7].replace(",",""))
+                        mo = float(cols[8].replace(",",""))
+                        if mo > 0:
+                            triples.append((mn, mx, mo))
+                    except ValueError:
+                        pass
+            res = clean_and_aggregate(key, triples)
+            if res:
+                res["date"] = ds
+                res["source"] = "agmarknet.gov.in"
+                return res
+        except Exception:
+            pass
+        time.sleep(1.5)
+    return None
+
+
+# ── History ───────────────────────────────────────────────
+def load_history():
+    return json.load(open(HISTORY_FILE)) if os.path.exists(HISTORY_FILE) else {}
+
+def save_history(h):
+    json.dump(h, open(HISTORY_FILE,"w"), indent=2)
+
+def push_history(h, key, modal, date):
+    h.setdefault(key, [])
+    if not h[key] or h[key][-1]["date"] != date:
+        h[key].append({"price": modal, "date": date})
+    h[key] = h[key][-7:]
+    return h
+
+
+# ── Main ──────────────────────────────────────────────────
+def main():
+    print("="*65)
+    print("  AgroReach Mandi Scraper & Cleansing Engine")
+    print(f"  {datetime.now().strftime('%d %b %Y  %H:%M IST')}")
+    print("="*65)
+
+    history = load_history()
     output = {
         "generated_at": datetime.now().isoformat(),
-        "scraped_at": datetime.now().strftime("%d %b %Y %H:%M:%S IST"),
-        "source": "data.gov.in API + Agmarknet",
-        "disclaimer": "Prices are the lowest modal price across all Indian markets",
-        "categories": {}
+        "source": "Agmarknet (data.gov.in + direct scrape)",
+        "note": "Lowest validated modal price. Mandi name undisclosed.",
+        "categories": {},
     }
-    
-    total_commodities = sum(len(items) for items in COMMODITIES.values())
-    scraped_count = 0
-    failed_count = 0
-    
-    for category, items in COMMODITIES.items():
-        print(f"\n📁 Category: {category.upper()}")
-        output["categories"][category] = []
-        
-        for idx, commodity in enumerate(items, 1):
-            name = commodity["name"]
-            api_names = commodity["api_names"]
-            
-            print(f"  [{idx}/{len(items)}] {name}...", end=" ", flush=True)
-            
-            price_data = None
-            
-            # Try each API name
-            for api_name in api_names:
-                # Try agmarknet API first
-                price_data = scraper.get_commodity_agmarknet(api_name)
-                if price_data and price_data.get('modal_price', 0) > 0:
-                    print(f"✓ ₹{price_data['modal_price']:,} (agmarknet)")
-                    break
-                
-                # Try data.gov.in as fallback
-                price_data = scraper.get_commodity_data_gov(api_name)
-                if price_data and price_data.get('modal_price', 0) > 0:
-                    print(f"✓ ₹{price_data['modal_price']:,} (data.gov.in)")
-                    break
-            
-            if price_data and price_data.get('modal_price', 0) > 0:
-                scraped_count += 1
+
+    total = sum(len(v) for v in COMMODITIES.values())
+    done = ok = failed = 0
+
+    for cat, items in COMMODITIES.items():
+        print(f"\n── {cat.upper()} ──")
+        output["categories"][cat] = []
+        for p in items:
+            done += 1
+            print(f"  [{done:2}/{total}] {p['name']}...", end=" ", flush=True)
+
+            res = fetch_api(p["key"], p["agmark"])
+            if not res:
+                print("→ scraping...", end=" ", flush=True)
+                res = fetch_agmarknet(p["key"], p["agmark"])
+
+            if res:
+                ok += 1
+                history = push_history(history, p["key"], res["modal"], res["date"])
                 entry = {
-                    **commodity,
-                    "category": category,
-                    "min_price": price_data.get("min_price", 0),
-                    "max_price": price_data.get("max_price", 0),
-                    "modal_price": price_data["modal_price"],
-                    "unit": price_data.get("unit", "quintal"),
-                    "lowest_market": price_data.get("lowest_market"),
-                    "markets_count": price_data.get("markets_count", 1)
+                    "key": p["key"], "name": p["name"], "category": cat,
+                    "min": res["min"], "max": res["max"], "modal": res["modal"],
+                    "unit": "quintal", "date": res["date"],
+                    "source": res["source"], "markets": res.get("markets", 1),
+                    "history": history.get(p["key"], []), "stale": False,
                 }
+                print(f"✅  Min:₹{res['min']:,}  Max:₹{res['max']:,}  "
+                      f"Low:₹{res['modal']:,}  [{res['date']} · {res['markets']} mandis]")
             else:
-                failed_count += 1
-                print("❌ No data")
+                failed += 1
+                last = history.get(p["key"], [{}])[-1].get("price", 0) if history.get(p["key"]) else 0
                 entry = {
-                    **commodity,
-                    "category": category,
-                    "min_price": 0,
-                    "max_price": 0,
-                    "modal_price": 0,
-                    "unit": "quintal"
+                    "key": p["key"], "name": p["name"], "category": cat,
+                    "min": 0, "max": 0, "modal": last,
+                    "unit": "quintal", "date": "N/A",
+                    "source": "none", "markets": 0,
+                    "history": history.get(p["key"], []), "stale": True,
                 }
-            
-            output["categories"][category].append(entry)
-            time.sleep(0.5)  # Respect rate limits
-    
-    # Save output
-    with open(output_file, 'w', encoding='utf-8') as f:
-        json.dump(output, f, indent=2, ensure_ascii=False)
-    
-    # Summary
-    print("\n" + "="*70)
-    print("SCRAPING COMPLETE")
-    print("="*70)
-    print(f"✅ Successfully scraped: {scraped_count}/{total_commodities}")
-    print(f"❌ Failed: {failed_count}")
-    print(f"📁 Output saved: {output_file}")
-    print("="*70)
-    
-    # Show sample of scraped data
-    if scraped_count > 0:
-        print("\n📊 Sample Prices:")
-        for category, items in output["categories"].items():
-            for item in items[:3]:  # Show first 3 per category
-                if item['modal_price'] > 0:
-                    print(f"  • {item['name']}: ₹{item['modal_price']:,} per {item['unit']}")
-            break  # Only show first category
-    
-    return output
+                print(f"❌  No data  (last known: ₹{last:,})")
+
+            output["categories"][cat].append(entry)
+            time.sleep(0.5)
+
+    json.dump(output, open(OUTPUT_FILE,"w",encoding="utf-8"), indent=2, ensure_ascii=False)
+    save_history(history)
+
+    print("\n" + "="*65)
+    print(f"  ✅  Fetched  : {ok}/{total}")
+    print(f"  ❌  No data  : {failed}  (fallback prices preserved)")
+    print(f"  💾  Saved    : {OUTPUT_FILE}")
+    print("="*65)
+
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="AgroReach Mandi Price Scraper")
-    parser.add_argument("--api-key", help="data.gov.in API key", default="579b464db66ec23bdd000001bf3ce4c4217e41dd6d3a8741ba5e176e")
-    parser.add_argument("--output", default="prices.json", help="Output file name")
-    
-    args = parser.parse_args()
-    scrape_all_prices(args.api_key, args.output)
+    main()

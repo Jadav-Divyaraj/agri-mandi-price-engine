@@ -1,6 +1,6 @@
 """
-AgroReach India - Production Mandi Price Scraper
-Fixed: Full commodity list + corrected API endpoints + better error handling
+AgroReach India — Asynchronous High-Concurrency Mandi Price Scraper
+Leverages aiohttp connection pooling, asyncio semaphores, and exponential backoff.
 """
 
 import asyncio
@@ -150,18 +150,11 @@ class MandiPriceScraper:
         return None
 
     async def get_agmarknet_price(self, commodity: Commodity) -> Optional[Dict]:
-        """
-        FIXED: Agmarknet uses specific date format and commodity codes
-        The API endpoint often requires specific formatting
-        """
-        today = datetime.now().strftime("%d-%b-%Y")  # Format: 15-Jan-2024
+        today = datetime.now().strftime("%d-%b-%Y")
         
-        # Try different API endpoint patterns that Agmarknet actually uses
         endpoints_to_try = [
-            # Pattern 1: Standard API
-            f"https://agmarknet.gov.in/api/PriceData",
-            # Pattern 2: Alternate endpoint
-            f"https://agmarknet.gov.in/PriceAndArrivals/DatewiseCommodityReport.aspx",
+            "https://agmarknet.gov.in/api/PriceData",
+            "https://agmarknet.gov.in/PriceAndArrivals/DatewiseCommodityReport.aspx",
         ]
         
         for endpoint in endpoints_to_try:
@@ -178,18 +171,16 @@ class MandiPriceScraper:
                     if result:
                         return result
                 
-                # If HTML returned, try parsing
                 if data and data.get("_raw_html"):
                     result = self._parse_html_for_prices(data["_raw_html"], commodity)
                     if result:
                         return result
                 
-                await asyncio.sleep(0.3)  # Small delay between attempts
+                await asyncio.sleep(0.3)
         
         return None
 
     async def get_datagov_price(self, commodity: Commodity) -> Optional[Dict]:
-        """Fetch from data.gov.in with proper resource IDs"""
         resource_ids = [
             "9ef84268-d588-465a-a308-a864a43d0070",
             "de3dbf1d-2a6d-46f0-a4f1-0f4b301b3de4"
@@ -215,12 +206,10 @@ class MandiPriceScraper:
         return None
 
     def _process_records(self, records: List[Dict], commodity: Commodity) -> Optional[Dict]:
-        """Process data.gov.in records"""
         prices = []
         
         for record in records:
             try:
-                # Try different field mappings
                 modal = record.get('modal_price') or record.get('modal') or record.get('price')
                 min_p = record.get('min_price') or record.get('min')
                 max_p = record.get('max_price') or record.get('max')
@@ -228,12 +217,11 @@ class MandiPriceScraper:
                 if not modal:
                     continue
                 
-                # Clean and convert
                 modal_val = float(str(modal).replace(',', ''))
                 min_val = float(str(min_p).replace(',', '')) if min_p else modal_val
                 max_val = float(str(max_p).replace(',', '')) if max_p else modal_val
                 
-                if 50 < modal_val < 500000:  # Valid price range
+                if 50 < modal_val < 500000:
                     prices.append({
                         "modal": modal_val,
                         "min": min_val,
@@ -242,35 +230,26 @@ class MandiPriceScraper:
                         "district": record.get('district', ''),
                         "state": record.get('state', '')
                     })
-            except (ValueError, TypeError) as e:
+            except (ValueError, TypeError):
                 continue
         
         return self._calculate_stats(prices) if prices else None
 
     def _parse_price_data(self, data: Any, commodity: Commodity) -> Optional[Dict]:
-        """Parse various JSON structures from APIs"""
         if isinstance(data, dict):
-            # Try to find prices in common keys
             prices_data = data.get('prices') or data.get('data') or data.get('records') or data.get('results')
             if prices_data and isinstance(prices_data, list):
                 return self._process_records(prices_data, commodity)
         return None
 
     def _parse_html_for_prices(self, html: str, commodity: Commodity) -> Optional[Dict]:
-        """Parse HTML table data from Agmarknet website"""
         import re
-        
         prices = []
-        markets = []
-        
-        # Pattern 1: Look for table rows with price data
-        # Agmarknet typically has tables with class like .table or #cphBody_GridView1
         row_pattern = r'<tr[^>]*>.*?<td[^>]*>([^<]+)</td>.*?<td[^>]*>([^<]+)</td>.*?<td[^>]*>([\d,]+)</td>.*?<td[^>]*>([\d,]+)</td>.*?<td[^>]*>([\d,]+)</td>.*?</tr>'
         matches = re.findall(row_pattern, html, re.DOTALL | re.IGNORECASE)
         
         for match in matches:
             try:
-                # match groups: market, district/state, min, max, modal
                 market = match[0].strip()
                 min_p = float(match[2].replace(',', ''))
                 max_p = float(match[3].replace(',', ''))
@@ -286,20 +265,9 @@ class MandiPriceScraper:
             except:
                 continue
         
-        # Pattern 2: JSON embedded in script tags (common in modern sites)
-        json_pattern = r'var\s+priceData\s*=\s*(\[.*?\]);'
-        json_matches = re.search(json_pattern, html, re.DOTALL)
-        if json_matches and not prices:
-            try:
-                json_data = json.loads(json_matches.group(1))
-                return self._process_records(json_data, commodity)
-            except:
-                pass
-        
         return self._calculate_stats(prices) if prices else None
 
     def _calculate_stats(self, prices: List[Dict]) -> Dict:
-        """Calculate min, max, modal from price list"""
         if not prices:
             return None
             
@@ -307,14 +275,13 @@ class MandiPriceScraper:
         min_prices = [p["min"] for p in prices]
         max_prices = [p["max"] for p in prices]
         
-        # Find market with lowest modal price
         lowest_idx = modal_prices.index(min(modal_prices))
         lowest_market = prices[lowest_idx]["market"]
         
         return {
             "min_price": int(min(min_prices)),
             "max_price": int(max(max_prices)),
-            "modal_price": int(min(modal_prices)),  # Using lowest modal as per original logic
+            "modal_price": int(min(modal_prices)),
             "unit": "quintal",
             "markets_count": len(prices),
             "lowest_market": lowest_market,
@@ -322,13 +289,9 @@ class MandiPriceScraper:
         }
 
     async def scrape_commodity(self, commodity: Commodity) -> Dict:
-        """Scrape with fallback strategy"""
         logger.info(f"Scraping {commodity.name}...")
         
-        # Strategy 1: Try Agmarknet first (usually more accurate for Indian mandis)
         data = await self.get_agmarknet_price(commodity)
-        
-        # Strategy 2: Fallback to data.gov.in
         if not data:
             data = await self.get_datagov_price(commodity)
         
@@ -355,7 +318,6 @@ class MandiPriceScraper:
 
 
 def get_all_commodities() -> List[Commodity]:
-    """Load all commodities from config"""
     commodities = []
     for category, items in COMMODITIES_CONFIG.items():
         for item in items:
@@ -369,8 +331,7 @@ def get_all_commodities() -> List[Commodity]:
 
 
 async def main():
-    """Main execution"""
-    print("🚀 AgroReach India - Mandi Price Scraper")
+    print("🚀 AgroReach India - High-Concurrency Mandi Scraper")
     print("=" * 60)
     
     commodities = get_all_commodities()
@@ -381,7 +342,6 @@ async def main():
     success_count = 0
     
     async with MandiPriceScraper() as scraper:
-        # Process in batches to avoid overwhelming the API
         batch_size = 5
         for i in range(0, total, batch_size):
             batch = commodities[i:i+batch_size]
@@ -398,11 +358,9 @@ async def main():
                 if result["success"]:
                     success_count += 1
             
-            # Delay between batches
             if i + batch_size < total:
                 await asyncio.sleep(1)
     
-    # Save results
     output = {
         "generated_at": datetime.now().isoformat(),
         "scraped_at": datetime.now().strftime("%d %b %Y, %I:%M %p IST"),
@@ -412,28 +370,19 @@ async def main():
         "categories": {}
     }
     
-    # Organize by category
     for result in results:
         cat = result["category"]
         if cat not in output["categories"]:
             output["categories"][cat] = []
         output["categories"][cat].append(result)
     
-    filename = f"prices_{datetime.now().strftime('%Y%m%d_%H%M')}.json"
+    filename = "prices.json"
     async with aiofiles.open(filename, 'w', encoding='utf-8') as f:
         await f.write(json.dumps(output, indent=2, ensure_ascii=False))
     
     print("\n" + "=" * 60)
     print(f"✅ Successfully scraped: {success_count}/{total}")
     print(f"📁 Saved to: {filename}")
-    
-    # Show sample results
-    print("\n📊 Sample Prices (Lowest Modal):")
-    for cat, items in output["categories"].items():
-        valid_items = [i for i in items if i["success"]]
-        if valid_items:
-            sample = valid_items[0]
-            print(f"  • {sample['name']}: ₹{sample['modal_price']:,}/quintal ({sample['markets_count']} markets)")
 
 
 if __name__ == "__main__":
