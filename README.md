@@ -205,6 +205,7 @@ Export Website/
 ├── commodities.json           # Master dictionary of commodities and search aliases
 ├── prices.json                # Production live price cache hydrated into the UI
 ├── sample_prices.json         # Validated reference snapshot (38 verified commodities)
+├── test_price_data.json       # Structured test fixture dataset for offline verification
 └── docs/                      # Supplementary documentation & asset references
 ```
 
